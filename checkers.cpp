@@ -1,9 +1,13 @@
 #include <iostream>
 using namespace std;
 
+//functions
+void displayBoard();
+
+//main
 int main() {
 
-displayBoard();
+    displayBoard();
 
     return 0;
 }
