@@ -93,10 +93,3 @@ void displayBoard()
 
     cout << endl;
 }
-
-int main()
-{
-    displayBoard();
-
-    return 0;
-}
