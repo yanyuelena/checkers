@@ -57,3 +57,58 @@ while ( choice == 1 || choice == 2 || choice == 'x' || choice == 'X')
             }
             
         else
+        do
+        {
+         cout << "\nEnter your desired board size (1-5) (Enter 'X' to exit game):" << endl;
+                    cout << "1. 6x6 board\n2. 7x7 board\n3. 8x8 board\n4. 9x9 board\n5. 10x10 board" << endl;
+                    cout << "Board size: ";
+                    cin >> boardSize;
+
+                    // Handle exit inside the setup loop
+                    if (boardSize == 'x' || boardSize == 'X')
+                    {
+                        return 0;
+                    }
+
+                    // --- SWITCH STATEMENT FOR DISPLAYING BOARD SIZE ---
+                    switch (boardSize)
+                    {
+                        case '1':
+                            cout << "Display 6x6 board" << endl;
+                            boardSize = 6;
+                            validSize = true;
+                            break;
+                        case '2':
+                            cout << "Display 7x7 board" << endl;
+                            boardSize = 7;
+                            validSize = true;
+                            break;
+                        case '3':
+                            cout << "Display 8x8 board" << endl;
+                            boardSize = 8;
+                            validSize = true;
+                            break;
+                        case '4':
+                            cout << "Display 9x9 board" << endl;
+                            boardSize = 9;
+                            validSize = true;
+                            break;
+                        case '5':
+                            cout << "Display 10x10 board" << endl;
+                            boardSize = 10;
+                            validSize = true;
+                            break;
+                        default:
+                            cout << "Please enter a valid number (1-5)." << endl;
+                            break; // validSize remains false, loop repeats
+                    }
+                }while (!validSize);
+                
+                currentPlayer = 1;
+    }
+            break; 
+}
+bool doubleMove = false;
+
+movementLogic();
+
