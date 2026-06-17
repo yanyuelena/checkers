@@ -112,3 +112,82 @@ bool doubleMove = false;
 
 movementLogic();
 
+if (piece = 1 && !doubleMove)
+    cout << "Double Move Activated!" << endl;
+    doubleMove = true;
+    movementLogic();
+else
+checkEndPoint();
+
+if (checkEndPoint == true)
+{
+    if (piece == uppercase)
+    {
+        checkWinning();
+    else
+        validPower = false;
+        //change piece into uppercase
+
+        do{
+            cout << "Choose your supperpowers(1-3): " <<endl;
+            cout << "1.Double move\n2.Reverse Capture\n3.Boomerang Capture"<< endl;
+            cin >> power;
+
+            switch (power)
+                    {
+                        case '1':
+                            //change uppercase piece to piece1
+                            validPower = true;
+                            break;
+                        case '2':
+                            //change uppercase piece to piece2
+                            validPower = true;
+                            break;
+                        case '3':
+                            //change uppercase piece to piece3
+                            validPower = true;
+                            break;
+                        default:
+                            cout << "Please enter a valid number." << endl;
+                    }
+           }while (!validPower);
+
+        checkWinning();
+     }
+}
+
+void saveGame (char board [][10], int size)
+{
+    ofstream saveFile ("savegame.txt");
+
+    saveFile << size << endl;
+
+    for (int row = 0; row < size; row++)
+    {
+        for (int col = 0; col < size; col++)
+        {
+            saveFile << board [row][col];
+        }
+
+        saveFile << endl;
+    }
+
+    saveFile.close();
+    cout << "Game saved successfully!" << endl;
+
+}
+
+void checkWinning()
+{
+
+}
+
+void switchPlayer()
+{
+
+}
+
+void checkEndPoint()
+{
+
+}
