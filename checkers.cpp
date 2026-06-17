@@ -1,107 +1,199 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+
 using namespace std;
 
-//functions
-void displayBoard();
+void saveGame(char board[][10], int boardSize, int currentPlayer);
+bool checkWinning();
+void switchPlayer(int &currentPlayer);
+bool checkEndPoint();
+void movementLogic();
 
-//main
-int main() {
+int main()
+{
+    int currentPlayer = 1;
+    int boardSize = 0;
+    bool validSize = false;
+    bool savedFile = false;
+    char board[10][10];
 
-    displayBoard();
+    string sizeChoice;
+    string gameChoice;
+
+    cout << "Menu (Enter 'X' to exit game):" << endl;
+    cout << "1. Load saved game" << endl;
+    cout << "2. Start new game" << endl;
+    cin >> gameChoice;
+
+    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
+    {
+        // Exit
+        if(gameChoice == "x" || gameChoice == "X")
+        {
+            return 0;
+        }
+
+        // Load Game
+        if(gameChoice == "1")
+        {
+            ifstream file("savegame.txt");
+
+            if(file)
+            {
+                savedFile = true;
+
+                file >> boardSize;
+                file >> currentPlayer;
+
+                for(int row = 0; row < boardSize; row++)
+                {
+                    for(int col = 0; col < boardSize; col++)
+                    {
+                        file >> board[row][col];
+                    }
+                }
+
+                file.close();
+
+
+                cout << "Saved game loaded!" << endl;
+                cout << "Continue previous game!" << endl;
+                cout << "Board Size: " << boardSize << endl;
+                cout << "Current Player: " << currentPlayer << endl;
+            }
+            else
+            {
+                cout << "No saved game found!" << endl;
+                cout << "Let's start a new game!" << endl;
+
+                gameChoice = "2";
+            }
+        }
+
+        // New Game
+        if(gameChoice == "2")
+        {
+            validSize = false;
+
+            while(!validSize)
+            {
+                cout << "\nEnter your desired board size (1-5)" << endl;
+                cout << "(Enter X to exit game)" << endl;
+                cout << "1. 6x6 board" << endl;
+                cout << "2. 7x7 board" << endl;
+                cout << "3. 8x8 board" << endl;
+                cout << "4. 9x9 board" << endl;
+                cout << "5. 10x10 board" << endl;
+                cin >> sizeChoice;
+
+                if(sizeChoice == "X" || sizeChoice == "x")
+                {
+                    return 0;
+                }
+
+                switch(sizeChoice[0])
+                {
+                    case '1':
+                        boardSize = 6;
+                        validSize = true;
+                        break;
+
+                    case '2':
+                        boardSize = 7;
+                        validSize = true;
+                        break;
+
+                    case '3':
+                        boardSize = 8;
+                        validSize = true;
+                        break;
+
+                    case '4':
+                        boardSize = 9;
+                        validSize = true;
+                        break;
+
+                    case '5':
+                        boardSize = 10;
+                        validSize = true;
+                        break;
+
+                    default:
+                        cout << "Please enter a valid number." << endl;
+                }
+            }
+
+            currentPlayer = 1;
+        }
+
+        bool doubleMove = false;
+
+        movementLogic();
+
+        if(/* piece == PIECE1 */ false && !doubleMove)
+        {
+            cout << "Double Move Activated!"
+                 << endl;
+
+            doubleMove = true;
+
+            movementLogic();
+        }
+
+        if(checkEndPoint())
+        {
+            // Superpower selection logic here
+        }
+
+        if(checkWinning())
+        {
+            cout << "Game Over! Player " << currentPlayer << " wins!" << endl;
+
+            return 0;
+        }
+        else
+        {
+            switchPlayer(currentPlayer);
+        }
+
+        break;
+    }
 
     return 0;
 }
 
 
-void displayBoard()
+
+
+
+
+void saveGame(char board[][10],
+              int boardSize,
+              int currentPlayer)
 {
-    int size;
-    char board[10][10];
+    ofstream saveFile("savegame.txt");
 
-    cout << "Enter board size (6 - 10): ";
-    cin >> size;
-
-    while(size < 6 || size > 10)
+    if(!saveFile)
     {
-        cout << "Invalid board size!" << endl;
-        cout << "Please enter a number between 6 and 10: ";
-        cin >> size;
+        cout << "Error saving file!" << endl;
+        return;
     }
 
-    // Initialize board
-    for(int row = 0; row < size; row++)
+    saveFile << boardSize << endl;
+    saveFile << currentPlayer << endl;
+
+    for(int row = 0; row < boardSize; row++)
     {
-        for(int col = 0; col < size; col++)
+        for(int col = 0; col < boardSize; col++)
         {
-            board[row][col] = ' ';
-        }
-    }
-
-    // Place O pieces (top 2 rows)
-    for(int row = 0; row < 2; row++)
-    {
-        for(int col = 0; col < size; col++)
-        {
-            if((row + col) % 2 == 0)
-            {
-                board[row][col] = 'O';
-            }
-        }
-    }
-
-    // Place X pieces (bottom 2 rows)
-    for(int row = size - 2; row < size; row++)
-    {
-        for(int col = 0; col < size; col++)
-        {
-            if((row + col) % 2 == 1)
-            {
-                board[row][col] = 'X';
-            }
-        }
-    }
-
-    cout << endl;
-
-    // Display board
-    for(int row = 0; row < size; row++)
-    {
-        cout << " ";
-
-        for(int i = 0; i < size * 4 + 1; i++)
-        {
-            cout << "-";
+            saveFile << board[row][col] << " ";
         }
 
-        cout << endl;
-
-        cout << "|";
-
-        for(int col = 0; col < size; col++)
-        {
-            cout << " " << board[row][col] << " |";
-        }
-
-        cout << " " << char('A' + row) << endl;
+        saveFile << endl;
     }
 
-    // Bottom border
-    cout << " ";
+    saveFile.close();
 
-    for(int i = 0; i < size * 4 + 1; i++)
-    {
-        cout << "-";
-    }
-
-    cout << endl;
-
-    // Column numbers
-    cout << " ";
-
-    for(int col = 1; col <= size; col++)
-    {
-        cout << " " << col << "  ";
-    }
-
-    cout << endl;
+    cout << "Game saved" << endl;
 }
