@@ -156,6 +156,13 @@ if (checkEndPoint == true)
      }
 }
 
+if (checkWinning == true)
+    cout << "Game Over! Player" << currentPlayer << "wins!" << endl;
+    return 0;
+else
+    switchPlayer();
+}
+
 void saveGame (char board [][10], int size)
 {
     ofstream saveFile ("savegame.txt");
