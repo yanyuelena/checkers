@@ -1,200 +1,199 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <algorithm>
-#include <cmath>
 
 using namespace std;
 
+void saveGame(char board[][10], int boardSize, int currentPlayer);
+bool checkWinning();
+void switchPlayer(int &currentPlayer);
+bool checkEndPoint();
+void movementLogic();
+
 int main()
 {
+    int currentPlayer = 1;
+    int boardSize = 0;
+    bool validSize = false;
+    bool savedFile = false;
+    char board[10][10];
 
-int currentPlayer = 1;
-string choice;
-int boardSize;
-bool validSize = false;
-bool savedFile;
-char board [10][10];
+    string sizeChoice;
+    string gameChoice;
 
-void saveGame;
-void checkWinning;
-void switchPlayer;
-void checkEndPoint;
+    cout << "Menu (Enter 'X' to exit game):" << endl;
+    cout << "1. Load saved game" << endl;
+    cout << "2. Start new game" << endl;
+    cin >> gameChoice;
 
-cout << "Menu ( Enter 'X' to exit game): "<<endl;
-     << "1.Load saved game/n 2.Start new game"<< endl;
-cin >> choice
-
-while ( choice == 1 || choice == 2 || choice == 'x' || choice == 'X')
-{
-    if ( choice == 'x' || choice == 'X')
-        return 0;
-    else
+    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
     {
-        if (choice == "1")
+        // Exit
+        if(gameChoice == "x" || gameChoice == "X")
+        {
+            return 0;
+        }
+
+        // Load Game
+        if(gameChoice == "1")
+        {
+            ifstream file("savegame.txt");
+
+            if(file)
             {
-                ifstream file("savegame.txt");
-                
-                if (file)
+                savedFile = true;
+
+                file >> boardSize;
+                file >> currentPlayer;
+
+                for(int row = 0; row < boardSize; row++)
                 {
-                    file >> boardSize;
-                    
-                    for (int row = 0; row < boardSize; row++)
+                    for(int col = 0; col < boardSize; col++)
                     {
-                        for (int col = 0; col < boardSize; col++)
-                        {
-                            file >> board[row][col];
-                        }
+                        file >> board[row][col];
                     }
-                    file.close();
-                    cout << "Saved game loaded!" << endl;
                 }
-                else
+
+                file.close();
+
+
+                cout << "Saved game loaded!" << endl;
+                cout << "Continue previous game!" << endl;
+                cout << "Board Size: " << boardSize << endl;
+                cout << "Current Player: " << currentPlayer << endl;
+            }
+            else
+            {
+                cout << "No saved game found!" << endl;
+                cout << "Let's start a new game!" << endl;
+
+                gameChoice = "2";
+            }
+        }
+
+        // New Game
+        if(gameChoice == "2")
+        {
+            validSize = false;
+
+            while(!validSize)
+            {
+                cout << "\nEnter your desired board size (1-5)" << endl;
+                cout << "(Enter X to exit game)" << endl;
+                cout << "1. 6x6 board" << endl;
+                cout << "2. 7x7 board" << endl;
+                cout << "3. 8x8 board" << endl;
+                cout << "4. 9x9 board" << endl;
+                cout << "5. 10x10 board" << endl;
+                cin >> sizeChoice;
+
+                if(sizeChoice == "X" || sizeChoice == "x")
                 {
-                    cout << "No saved game found! Let's start a new game!" << endl;
-                    choice = "2"; // Redirects to start a new game configuration
+                    return 0;
+                }
+
+                switch(sizeChoice[0])
+                {
+                    case '1':
+                        boardSize = 6;
+                        validSize = true;
+                        break;
+
+                    case '2':
+                        boardSize = 7;
+                        validSize = true;
+                        break;
+
+                    case '3':
+                        boardSize = 8;
+                        validSize = true;
+                        break;
+
+                    case '4':
+                        boardSize = 9;
+                        validSize = true;
+                        break;
+
+                    case '5':
+                        boardSize = 10;
+                        validSize = true;
+                        break;
+
+                    default:
+                        cout << "Please enter a valid number." << endl;
                 }
             }
-            
+
+            currentPlayer = 1;
+        }
+
+        bool doubleMove = false;
+
+        movementLogic();
+
+        if(/* piece == PIECE1 */ false && !doubleMove)
+        {
+            cout << "Double Move Activated!"
+                 << endl;
+
+            doubleMove = true;
+
+            movementLogic();
+        }
+
+        if(checkEndPoint())
+        {
+            // Superpower selection logic here
+        }
+
+        if(checkWinning())
+        {
+            cout << "Game Over! Player " << currentPlayer << " wins!" << endl;
+
+            return 0;
+        }
         else
-        do
         {
-         cout << "\nEnter your desired board size (1-5) (Enter 'X' to exit game):" << endl;
-                    cout << "1. 6x6 board\n2. 7x7 board\n3. 8x8 board\n4. 9x9 board\n5. 10x10 board" << endl;
-                    cout << "Board size: ";
-                    cin >> boardSize;
+            switchPlayer(currentPlayer);
+        }
 
-                    // Handle exit inside the setup loop
-                    if (boardSize == 'x' || boardSize == 'X')
-                    {
-                        return 0;
-                    }
-
-                    // --- SWITCH STATEMENT FOR DISPLAYING BOARD SIZE ---
-                    switch (boardSize)
-                    {
-                        case '1':
-                            cout << "Display 6x6 board" << endl;
-                            boardSize = 6;
-                            validSize = true;
-                            break;
-                        case '2':
-                            cout << "Display 7x7 board" << endl;
-                            boardSize = 7;
-                            validSize = true;
-                            break;
-                        case '3':
-                            cout << "Display 8x8 board" << endl;
-                            boardSize = 8;
-                            validSize = true;
-                            break;
-                        case '4':
-                            cout << "Display 9x9 board" << endl;
-                            boardSize = 9;
-                            validSize = true;
-                            break;
-                        case '5':
-                            cout << "Display 10x10 board" << endl;
-                            boardSize = 10;
-                            validSize = true;
-                            break;
-                        default:
-                            cout << "Please enter a valid number (1-5)." << endl;
-                            break; // validSize remains false, loop repeats
-                    }
-                }while (!validSize);
-                
-                currentPlayer = 1;
+        break;
     }
-            break; 
-}
-bool doubleMove = false;
 
-movementLogic();
-
-if (piece = 1 && !doubleMove)
-    cout << "Double Move Activated!" << endl;
-    doubleMove = true;
-    movementLogic();
-else
-checkEndPoint();
-
-if (checkEndPoint == true)
-{
-    if (piece == uppercase)
-    {
-        checkWinning();
-    else
-        validPower = false;
-        //change piece into uppercase
-
-        do{
-            cout << "Choose your supperpowers(1-3): " <<endl;
-            cout << "1.Double move\n2.Reverse Capture\n3.Boomerang Capture"<< endl;
-            cin >> power;
-
-            switch (power)
-                    {
-                        case '1':
-                            //change uppercase piece to piece1
-                            validPower = true;
-                            break;
-                        case '2':
-                            //change uppercase piece to piece2
-                            validPower = true;
-                            break;
-                        case '3':
-                            //change uppercase piece to piece3
-                            validPower = true;
-                            break;
-                        default:
-                            cout << "Please enter a valid number." << endl;
-                    }
-           }while (!validPower);
-
-        checkWinning();
-     }
-}
-
-if (checkWinning == true)
-    cout << "Game Over! Player" << currentPlayer << "wins!" << endl;
     return 0;
-else
-    switchPlayer();
 }
 
-void saveGame (char board [][10], int size)
+
+
+
+
+
+void saveGame(char board[][10],
+              int boardSize,
+              int currentPlayer)
 {
-    ofstream saveFile ("savegame.txt");
+    ofstream saveFile("savegame.txt");
 
-    saveFile << size << endl;
-
-    for (int row = 0; row < size; row++)
+    if(!saveFile)
     {
-        for (int col = 0; col < size; col++)
+        cout << "Error saving file!" << endl;
+        return;
+    }
+
+    saveFile << boardSize << endl;
+    saveFile << currentPlayer << endl;
+
+    for(int row = 0; row < boardSize; row++)
+    {
+        for(int col = 0; col < boardSize; col++)
         {
-            saveFile << board [row][col];
+            saveFile << board[row][col] << " ";
         }
 
         saveFile << endl;
     }
 
     saveFile.close();
-    cout << "Game saved successfully!" << endl;
 
-}
-
-void checkWinning()
-{
-
-}
-
-void switchPlayer()
-{
-
-}
-
-void checkEndPoint()
-{
-
+    cout << "Game saved" << endl;
 }
