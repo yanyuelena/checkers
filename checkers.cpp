@@ -5,13 +5,12 @@
 using namespace std;
 
 void saveGame(char board[][10], int boardSize, int currentPlayer);
-bool checkWinning();
-void switchPlayer(int &currentPlayer);
-bool checkEndPoint();
-void movementLogic();
+// bool checkWinning();
+// void switchPlayer(int &currentPlayer);
+// bool checkEndPoint();
+void movementLogic(int currentPlayer, char board[][10], int boardSize);
 
-int main()
-{
+int main() {
     int currentPlayer = 1;
     int boardSize = 0;
     bool validSize = false;
@@ -129,7 +128,7 @@ int main()
 
         bool doubleMove = false;
 
-        movementLogic();
+        movementLogic(currentPlayer, board, boardSize);
 
         if(/* piece == PIECE1 */ false && !doubleMove)
         {
@@ -138,10 +137,10 @@ int main()
 
             doubleMove = true;
 
-            movementLogic();
+        movementLogic(currentPlayer, board, boardSize);
         }
 
-        if(checkEndPoint())
+        /* if(checkEndPoint())
         {
             // Superpower selection logic here
         }
@@ -159,13 +158,10 @@ int main()
 
         break;
     }
-
-    return 0;
+    */
+        return 0;
+    }
 }
-
-
-
-
 
 
 void saveGame(char board[][10],
@@ -196,4 +192,25 @@ void saveGame(char board[][10],
     saveFile.close();
 
     cout << "Game saved" << endl;
+}
+
+void movementLogic(int currentPlayer, char board[][10], int boardSize) {
+    string fromCoord, toCoord;
+    bool invalidMove = false;
+
+    while (!invalidMove) {
+        cout << "Player " << currentPlayer << " to move!" << endl;
+        cout << "Enter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
+                "(Enter S to save and X to exit)" << endl;
+        cin >> fromCoord;
+
+        if (fromCoord == "x" || fromCoord == "X") {
+            exit(0);
+        }
+        else if (fromCoord == "s" || fromCoord == "S") {
+            saveGame(board, boardSize, currentPlayer);
+            continue;
+        }
+        // else if （to check whether the piece belongs to currentPlayer
+    }
 }
