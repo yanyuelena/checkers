@@ -169,7 +169,7 @@ int main() {
             {
                 for(int col = 0; col < boardSize; col++)
                 {
-                    if((row + col) % 2 == 1)
+                    if((row + col) % 2 == 0)
                     {
                         board[row][col] = 'X';
                     }
