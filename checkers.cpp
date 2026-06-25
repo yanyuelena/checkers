@@ -320,6 +320,7 @@ void saveGame(char **board, int boardSize, int currentPlayer)
 
     file.close();
     cout << "Game saved successfully!" << endl;
+}
 
 // check if it's a valid move, function to be called in movementLogic (Elena's code is moved up here)
 bool validMove(string fromCoord, string toCoord, char **board, int boardSize, string col_string, int &row, int &col, int currentPlayer) {
