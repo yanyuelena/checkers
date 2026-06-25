@@ -290,26 +290,26 @@ void saveGame(char **board, int boardSize, int currentPlayer)
         return;
     }
 
-    // Save board size
+    // Save metadata
     file << boardSize << endl;
-
-    // Save current player
     file << currentPlayer << endl;
 
-    // Save board contents
+    // Save board contents (substituting spaces with periods)
     for(int row = 0; row < boardSize; row++)
     {
         for(int col = 0; col < boardSize; col++)
         {
-            file << board[row][col] << " ";
+            if (board[row][col] == ' ') {
+                file << '.' << " ";
+            } else {
+                file << board[row][col] << " ";
+            }
         }
         file << endl;
     }
 
     file.close();
-
     cout << "Game saved successfully!" << endl;
-}
 
 // check if it's a valid move, function to be called in movementLogic (Elena's code is moved up here)
 bool validMove(string fromCoord, string toCoord, char **board, int boardSize, string col_string, int &row, int &col, int currentPlayer) {
