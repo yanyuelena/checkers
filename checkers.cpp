@@ -54,18 +54,27 @@ int main() {
                 file >> boardSize;
                 file >> currentPlayer;
 
+                // Allocate memory for the board
                 board = new char*[boardSize];
-
                 for(int row = 0; row < boardSize; row++)
                 {
                     board[row] = new char[boardSize];
                 }
 
+                // Read the board normally using standard streams
                 for(int row = 0; row < boardSize; row++)
                 {
                     for(int col = 0; col < boardSize; col++)
                     {
-                        file >> board[row][col];
+                        char temp;
+                        file >> temp; // Read the next character, automatically skipping whitespace dividers
+
+                        // Convert placeholder back into a standard space
+                        if (temp == '.') {
+                            board[row][col] = ' '; // Convert '.' placeholder back to a clean blank tile
+                        } else {
+                            board[row][col] = temp; // Assign 'X' or 'O' directly to the board
+                        }
                     }
                 }
 
@@ -82,6 +91,7 @@ int main() {
                 gameChoice = "2";
             }
         }
+
 
         // New Game
         if(gameChoice == "2")
@@ -290,24 +300,25 @@ void saveGame(char **board, int boardSize, int currentPlayer)
         return;
     }
 
-    // Save board size
+    // Save metadata
     file << boardSize << endl;
-
-    // Save current player
     file << currentPlayer << endl;
 
-    // Save board contents
+    // Save board contents (substituting spaces with periods)
     for(int row = 0; row < boardSize; row++)
     {
         for(int col = 0; col < boardSize; col++)
         {
-            file << board[row][col] << " ";
+            if (board[row][col] == ' ') {
+                file << '.' << " ";
+            } else {
+                file << board[row][col] << " "; // Write 'X' or 'O' separated by a space
+            }
         }
         file << endl;
     }
 
     file.close();
-
     cout << "Game saved successfully!" << endl;
 }
 
