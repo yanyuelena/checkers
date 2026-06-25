@@ -54,18 +54,27 @@ int main() {
                 file >> boardSize;
                 file >> currentPlayer;
 
+                // Allocate memory for the board
                 board = new char*[boardSize];
-
                 for(int row = 0; row < boardSize; row++)
                 {
                     board[row] = new char[boardSize];
                 }
 
+                // Read the board normally using standard streams
                 for(int row = 0; row < boardSize; row++)
                 {
                     for(int col = 0; col < boardSize; col++)
                     {
-                        file >> board[row][col];
+                        char temp;
+                        file >> temp;
+
+                        // Convert placeholder back into a standard space
+                        if (temp == '.') {
+                            board[row][col] = ' ';
+                        } else {
+                            board[row][col] = temp;
+                        }
                     }
                 }
 
@@ -82,6 +91,7 @@ int main() {
                 gameChoice = "2";
             }
         }
+
 
         // New Game
         if(gameChoice == "2")
