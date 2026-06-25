@@ -67,13 +67,13 @@ int main() {
                     for(int col = 0; col < boardSize; col++)
                     {
                         char temp;
-                        file >> temp;
+                        file >> temp; // Read the next character, automatically skipping whitespace dividers
 
                         // Convert placeholder back into a standard space
                         if (temp == '.') {
-                            board[row][col] = ' ';
+                            board[row][col] = ' '; // Convert '.' placeholder back to a clean blank tile
                         } else {
-                            board[row][col] = temp;
+                            board[row][col] = temp; // Assign 'X' or 'O' directly to the board
                         }
                     }
                 }
@@ -312,7 +312,7 @@ void saveGame(char **board, int boardSize, int currentPlayer)
             if (board[row][col] == ' ') {
                 file << '.' << " ";
             } else {
-                file << board[row][col] << " ";
+                file << board[row][col] << " "; // Write 'X' or 'O' separated by a space
             }
         }
         file << endl;
