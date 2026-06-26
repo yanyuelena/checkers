@@ -8,7 +8,7 @@ using namespace std;
 void saveGame(char **board, int boardSize, int currentPlayer);
 // bool checkWinning();
 void switchPlayer(int &currentPlayer);
-// bool checkEndPoint();
+bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int currentPlayer);
 bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer);
 bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer);
 void movementLogic(int currentPlayer, char **board, int boardSize);
@@ -37,6 +37,12 @@ int main() {
 
     while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
     {
+        cout << "Invalid choice! Please enter 1, 2 or X." << endl;
+        cout << "Choice: ";
+        cin >> gameChoice;
+    }
+
+    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X") {
         // Exit
         if(gameChoice == "x" || gameChoice == "X")
         {
@@ -101,13 +107,14 @@ int main() {
 
             while(!validSize)
             {
-                cout << "Enter your desired board size (1-5)" << endl;
-                cout << "(Enter X to exit game)" << endl;
+                cout <<"\nWelcome to Checkers Game !" << endl;
                 cout << "1. 6x6 board" << endl;
                 cout << "2. 7x7 board" << endl;
                 cout << "3. 8x8 board" << endl;
                 cout << "4. 9x9 board" << endl;
                 cout << "5. 10x10 board" << endl;
+                cout << "(Enter X to exit game)" << endl;
+                cout << "Enter your desired board size (1-5)" << endl;
                 cin >> sizeChoice;
 
                 if(sizeChoice == "X" || sizeChoice == "x")
@@ -241,23 +248,30 @@ int main() {
             // if not then switch to the next player
             switchPlayer(currentPlayer);
         }
-        // Free dynamic memory
-        if(board != NULL)
+
+        bool gameOver = false;
+
+        while (!gameOver)
         {
-            for(int row = 0; row < boardSize; row++)
-            {
-                delete[] board[row];
-            }
+            cout << endl << endl;
 
-            delete[] board;
+            movementLogic(currentPlayer, board, boardSize);
+            // if not then switch to the next player
+            switchPlayer(currentPlayer);
         }
-        return 0;
     }
+    // Free dynamic memory
+    if(board != NULL)
+    {
+       for(int row = 0; row < boardSize; row++)
+         {
+             delete[] board[row];
+         }
+
+         delete[] board;
+    }
+        return 0;
 }
-
-
-
-
 
 
 
@@ -269,8 +283,29 @@ void switchPlayer(int &currentPlayer)
         currentPlayer = 1;
 }
 
+bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int currentPlayer)
+{
+    if (currentPlayer == 1 && toRow == boardSize - 1)
+    {
+        if (board[toRow][toCol] == 'o')
+        {
+            board[toRow][toCol] = 'O';
+            cout << "Congrats to Player 1's piece became a King!\n";
+            return true;
+        }
+    }
 
-
+    else if (currentPlayer == 2 && toRow == 0)
+    {
+        if (board[toRow][toCol] == 'x')
+        {
+            board[toRow][toCol] = 'X';
+            cout << "Congrats to Player 2's piece became a King!\n";
+            return true;
+        }
+    }
+    return false;
+}
 
 void saveGame(char **board, int boardSize, int currentPlayer)
 {
@@ -488,14 +523,14 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
     bool successMove = false;
 
     do {
-        cout << "Enter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
+        cout << "\nEnter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
         cout << "From which coordinate (Please enter the coordinate without any spacing): ";
         cin >> fromCoord;
         if (validFromCoord(fromCoord, board, boardSize, col_string, fromRow, fromCol, currentPlayer) == false) {
             continue;
         }
-        cout << "Enter the destination coordinate (eg. D4)" << endl <<
+        cout << "\nEnter the destination coordinate (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
         cout << "To which coordinate (Please enter the coordinate without any spacing): ";
         cin >> toCoord;
@@ -580,9 +615,9 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
     } while (successMove == false);
 
     if (successMove) {
-        // Display board
+        // Display board2
         cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
-
+        checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
         // --- DISPLAY BOARD BLOCK ---
         cout << endl;
         for(int row = 0; row < boardSize; row++)
@@ -612,5 +647,5 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
         }
         cout << endl << endl;
     }
+    checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
 }
-
