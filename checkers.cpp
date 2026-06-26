@@ -569,6 +569,11 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
         board[toRow][toCol] = board[fromRow][fromCol];
         board[fromRow][fromCol] = ' ';
 
+        if (isJump == true) {
+            board[middleRow][middleCol] = ' ';
+            cout << "\n*** You captured an opponent's piece! ***" << endl;
+        }
+
         successMove = true;
 
     } while (successMove == false);
