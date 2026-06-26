@@ -573,6 +573,94 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
         if (isJump == true) {
             board[middleRow][middleCol] = ' ';
             cout << "\n*** You captured an opponent's piece! ***" << endl;
+
+            // elimination ++;
+            int currentRound = 1;
+
+            // force jump check
+            bool continousJump = true;
+            
+            int currentRow = toRow;
+            int currentCol = toCol; // elimination count for current jump sequence, so i can put diff sentences hahahwheaha
+
+            while (continousJump) {
+                continousJump = false;
+
+                int directionCols[2] = {currentCol - 2, currentCol + 2};
+
+                for (int i = 0; i < 2; i++) {
+                    int nextRow = 0;
+                    int nextCol = directionCols[i];
+
+                    if (currentPlayer == 1) {
+                        nextRow = currentRow + 2;
+                    } else if (currentPlayer == 2) {
+                        nextRow = currentRow - 2;
+                    }
+
+                    if (nextRow >= 0 && nextRow < 10 && nextCol >= 0 && nextCol < 10) {
+                        if (board[nextRow][nextCol] == ' ') {
+                            int nextMidRow = 0;
+                            int nextMidCol = 0;
+
+                            if (currentPlayer == 1) {
+                                nextMidRow = currentRow + 1;
+                                if (nextCol == currentCol + 2) {
+                                    nextMidCol = currentCol + 1;
+                                } else {
+                                    nextMidCol = currentCol - 1;
+                                }
+
+                                if (board[nextMidRow][nextMidCol] == 'x' || board[nextMidRow][nextMidCol] == 'X') {
+                                    board[nextRow][nextCol] = board[currentRow][currentCol];
+                                    board[currentRow][currentCol] = ' ';
+                                    board[nextMidRow][nextMidCol] = ' ';
+
+                                    currentRound ++;
+                                    // elimination ++;
+
+                                    currentRow = nextRow;
+                                    currentCol = nextCol;
+                                    continousJump = true;
+                                    break;
+                                }
+                            } 
+
+                            else if (currentPlayer == 2) {
+                                nextMidRow = currentRow - 1;
+                                if (nextCol == currentCol + 2) {
+                                    nextMidCol = currentCol + 1;
+                                } else {
+                                    nextMidCol = currentCol - 1;
+                                }
+
+                                if (board[nextMidRow][nextMidCol] == 'o' || board[nextMidRow][nextMidCol] == 'O') {
+                                    board[nextRow][nextCol] = board[currentRow][currentCol];
+                                    board[currentRow][currentCol] = ' ';
+                                    board[nextMidRow][nextMidCol] = ' ';
+
+                                    currentRound ++;
+                                    // elimination ++;
+
+                                    currentRow = nextRow;
+                                    currentCol = nextCol;
+                                    continousJump = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                // diff outputs
+                if (currentRound == 2) {
+                    cout << "\nReverse Capture! Both pieces are destroyed!" << endl;
+                    cout << currentRound << endl;
+                }
+                else if (currentRound == 3) {
+                    cout << "\nBoomerang Active! Your piece returns to safety." << endl;
+                    cout << currentRound << endl;
+                }
+            }
         }
 
         successMove = true;
