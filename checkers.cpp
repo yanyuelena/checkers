@@ -310,22 +310,6 @@ void saveGame(char **board, int boardSize, int currentPlayer)
     cout << "Game saved successfully!" << endl;
 }
 
-
-void movementLogic(int currentPlayer, char **board, int boardSize) {
-    string fromCoord, toCoord;
-    bool validMove = false;
-    while (!validMove) {
-        cout << "Player " << currentPlayer << " to move!" << endl;
-        if (currentPlayer == 1) {
-            cout << "Your piece is 'o'" << endl;
-        }
-        else {
-            cout << "Your piece is 'x'" << endl;
-        }
-        cout << "Enter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
-                "(Enter S to save and X to exit)" << endl;
-        cout << "From which coordinate: ";
-        cin >> fromCoord;
 // check if it's a valid move, function to be called in movementLogic
 bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer) {
 
@@ -340,18 +324,6 @@ bool validFromCoord(string fromCoord, char **board, int boardSize, string col_st
     char row_char = toupper(fromCoord[0]);
     fromRow = row_char - 'A';
 
-        if (fromCoord.length() == 2) {
-            col_string = fromCoord[1];
-        }
-        else if (fromCoord.length() == 3) {
-            col_string = fromCoord[1];
-            col_string += fromCoord[2];
-        }
-        else {
-            cout << "Invalid coordinate! Please enter a valid coordinate." << endl;
-            continue;
-        }
-        int col;
     if (fromCoord.length() == 2) {
         col_string = fromCoord[1];
     }
