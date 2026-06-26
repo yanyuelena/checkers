@@ -102,6 +102,8 @@ int main() {
             while(!validSize)
             {
                 cout <<"Welcome to Checkers Game !" << endl;
+                cout << "Enter your desired board size (1-5)" << endl;
+                cout << "(Enter X to exit game)" << endl;
                 cout << "1. 6x6 board" << endl;
                 cout << "2. 7x7 board" << endl;
                 cout << "3. 8x8 board" << endl;
@@ -192,11 +194,33 @@ int main() {
             currentPlayer = 1;
         }
 
-        // Display board
-        cout << endl;
+        bool gameOver = false;
 
-        for(int row = 0; row < boardSize; row++)
-        {
+        while (!gameOver) {
+            // Display board
+            cout << endl;
+
+            for(int row = 0; row < boardSize; row++)
+            {
+                cout << " ";
+
+                for(int i = 0; i < boardSize * 4 + 1; i++)
+                {
+                    cout << "-";
+                }
+
+                cout << endl;
+
+                cout << "|";
+
+                for(int col = 0; col < boardSize; col++)
+                {
+                    cout << " " << board[row][col] << " |";
+                }
+
+                cout << " " << char('A' + row) << endl;
+            }
+
             cout << " ";
 
             for(int i = 0; i < boardSize * 4 + 1; i++)
@@ -206,11 +230,11 @@ int main() {
 
             cout << endl;
 
-            cout << "|";
+            cout << " ";
 
-            for(int col = 0; col < boardSize; col++)
+            for(int col = 1; col <= boardSize; col++)
             {
-                cout << " " << board[row][col] << " |";
+                cout << " " << col << "  ";
             }
 
             cout << " " << char('A' + row) << endl;
@@ -235,6 +259,8 @@ int main() {
             {
                 cout << " " << col << "  ";
             }
+
+            cout << endl << endl;
 
             cout << endl << endl;
 
@@ -491,6 +517,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
 
     do {
         cout << "\nEnter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
+        cout << "Enter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
         cout << "From which coordinate (Please enter the coordinate without any spacing): ";
         cin >> fromCoord;
@@ -498,6 +525,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             continue;
         }
         cout << "\nEnter the destination coordinate (eg. D4)" << endl <<
+        cout << "Enter the destination coordinate (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
         cout << "To which coordinate (Please enter the coordinate without any spacing): ";
         cin >> toCoord;
