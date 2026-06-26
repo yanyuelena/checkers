@@ -101,7 +101,7 @@ int main() {
 
             while(!validSize)
             {
-                cout << "\nEnter your desired board size (1-5)" << endl;
+                cout << "Enter your desired board size (1-5)" << endl;
                 cout << "(Enter X to exit game)" << endl;
                 cout << "1. 6x6 board" << endl;
                 cout << "2. 7x7 board" << endl;
