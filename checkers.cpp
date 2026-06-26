@@ -233,20 +233,12 @@ int main() {
 
         cout << endl << endl;
 
-        while(true)
-        {
-        bool doubleMove = false;
-
         movementLogic(currentPlayer, board, boardSize);
+        // check has anyone win the game
+        // if not then switch to the next player
+        switchPlayer(currentPlayer);
 
-        if(/* piece == PIECE1 */ false && !doubleMove)
-        {
-            cout << "Double Move Activated!"
-                 << endl;
 
-            doubleMove = true;
-
-        movementLogic(currentPlayer, board, boardSize);
         }
 
     return 0;
