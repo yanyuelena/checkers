@@ -29,11 +29,11 @@ int main() {
     cin >> gameChoice;
 
     while(gameChoice != "1" && gameChoice != "2" && gameChoice != "x" && gameChoice != "X")
-        {
-            cout << "Invalid choice! Please enter 1, 2 or X." << endl;
-            cout << "Choice: ";
-            cin >> gameChoice;
-        }
+    {
+        cout << "Invalid choice! Please enter 1, 2 or X." << endl;
+        cout << "Choice: ";
+        cin >> gameChoice;
+    }
 
     while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
     {
@@ -237,13 +237,7 @@ int main() {
         // check has anyone win the game
         // if not then switch to the next player
         switchPlayer(currentPlayer);
-
-
-        }
-
-    return 0;
     }
-}
 
     // Free dynamic memory
     if(board != NULL)
