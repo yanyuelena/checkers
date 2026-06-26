@@ -9,6 +9,8 @@ void saveGame(char **board, int boardSize, int currentPlayer);
 // bool checkWinning();
 // void switchPlayer(int &currentPlayer);
 // bool checkEndPoint();
+bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer);
+bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer);
 void movementLogic(int currentPlayer, char **board, int boardSize);
 
 int main() {
@@ -17,7 +19,6 @@ int main() {
     bool validSize = false;
     bool savedFile = false;
     char **board = NULL;
-
     string sizeChoice;
     string gameChoice;
 
@@ -322,219 +323,211 @@ void saveGame(char **board, int boardSize, int currentPlayer)
     cout << "Game saved successfully!" << endl;
 }
 
-// check if it's a valid move, function to be called in movementLogic (Elena's code is moved up here)
-bool validMove(string fromCoord, string toCoord, char **board, int boardSize, string col_string, int &row, int &col, int currentPlayer) {
+// check if it's a valid move, function to be called in movementLogic
+bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer) {
+
+    if (fromCoord == "x" || fromCoord == "X" ) {
+        exit(0);
+    }
+    else if (fromCoord == "s" || fromCoord == "S") {
+        saveGame(board, boardSize, currentPlayer);
+        return false;
+    }
+
     char row_char = toupper(fromCoord[0]);
-        row = row_char - 'A';
-        col_string = ""; // from what i learn online it says that better assign it to empty string good practice wor
-        
-        if (fromCoord == "x" || fromCoord == "X" || toCoord == "x" || toCoord == "X") {
-            exit(0);
-        }
-        else if (fromCoord == "s" || fromCoord == "S" || toCoord == "s" || toCoord == "S") {
-            saveGame(board, boardSize, currentPlayer);
-            return false;
-        }
+    fromRow = row_char - 'A';
 
-        if (fromCoord.length() == 2) {
-            col_string = fromCoord[1];
-        }
-        else if (fromCoord.length() == 3) {
-            col_string = fromCoord[1];
-            col_string += fromCoord[2];
-        }
-        else if (toCoord.length() == 2) {
-            col_string = toCoord[1];
-        }
-        else if (toCoord.length() == 3) {
-            col_string = toCoord[1];
-            col_string += toCoord[2];
-        }
-        else {
-            cout << "Invalid coordinate! Please enter a valid coordinate." << endl;
-            return false;
-        }
+    if (fromCoord.length() == 2) {
+        col_string = fromCoord[1];
+    }
+    else if (fromCoord.length() == 3) {
+        col_string = fromCoord[1];
+        col_string += fromCoord[2];
+    }
+    else {
+        cout << "Invalid coordinate! Please enter a valid coordinate." << endl;
+        return false;
+    }
 
-        if (col_string == "1") {
-            col = 0;
-        }
-        else if (col_string == "2") {
-            col = 1;
-        }
-        else if (col_string == "3") {
-            col = 2;
-        }
-        else if (col_string == "4") {
-            col = 3;
-        }
-        else if (col_string == "5") {
-            col = 4;
-        }
-        else if (col_string == "6") {
-            col = 5;
-        }
-        else if (col_string == "7") {
-            col = 6;
-        }
-        else if (col_string == "8") {
-            col = 7;
-        }
-        else if (col_string == "9") {
-            col = 8;
-        }
-        else if (col_string == "10") {
-            col = 9;
-        }
-        else {
-            cout << "Invalid column number! Please enter a number between 1 and 10." << endl;
-            return false;
-        }
+    if (col_string == "1") {
+        fromCol = 0;
+    }
+    else if (col_string == "2") {
+        fromCol = 1;
+    }
+    else if (col_string == "3") {
+        fromCol = 2;
+    }
+    else if (col_string == "4") {
+        fromCol = 3;
+    }
+    else if (col_string == "5") {
+        fromCol = 4;
+    }
+    else if (col_string == "6") {
+        fromCol = 5;
+    }
+    else if (col_string == "7") {
+        fromCol = 6;
+    }
+    else if (col_string == "8") {
+        fromCol = 7;
+    }
+    else if (col_string == "9") {
+        fromCol = 8;
+    }
+    else if (col_string == "10") {
+        fromCol = 9;
+    }
+    else {
+        cout << "Invalid column number! Please enter a number between 1 and 10." << endl;
+        return false;
+    }
 
-        // check if is the piece on the board
-        if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
-            cout << "Invalid! That space is off the board. Try again." << endl;
-            return false;
-        }
+    // check if currentPlayer moving their own piece
+    char playerPiece;
 
-        // check if is the coordinate consist any piece
-        if (board[row][col] == ' ') {
-            cout << "Invalid! There is no piece there. Try again." << endl;
-            return false;
-        }
+    if (currentPlayer == 1) {
+        playerPiece = 'o'; //when the piece reaches endPoint it will become capital letter
+        // need to consider this in the future
+    } else {
+        playerPiece = 'x';
+    }
 
-        // check if currentPlayer moving their own piece
-        char playerPiece;
+    // check if is the piece on the board
+    if (fromRow < 0 || fromRow > boardSize-1 || fromCol < 0 || fromCol > boardSize-1) {
+        cout << "Invalid! That space is off the board. Try again." << endl;
+        return false;
+    }
 
-        if (currentPlayer == 1) {
-            playerPiece = 'o';
-        } else {
-            playerPiece = 'x';
-        }
+    // check if is the coordinate consist any piece
+    if (board[fromRow][fromCol] == ' ') {
+        cout << "Invalid! There is no piece there. Try again." << endl;
+        return false;
+    }
 
-        if (board[row][col] != playerPiece) {
-            cout << "Invalid! That piece does not belong to you. Try again." << endl;
-            return false;
-        }
+    if (board[fromRow][fromCol] != playerPiece) {
+        cout << "Invalid! That piece does not belong to you. Try again." << endl;
+        return false;
+    }
 
-        cout << "Valid piece selected at " << row_char << col_string << "!" << endl;
-        return true;
+    cout << "Valid piece selected at " << row_char << col_string << "!" << endl;
+    return true;
 }
 
+bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer) {
+
+    if (toCoord == "x" || toCoord == "X") {
+        exit(0);
+    }
+    else if (toCoord == "s" || toCoord == "S") {
+        saveGame(board, boardSize, currentPlayer);
+        return false;
+    }
+
+    char row_char = toupper(toCoord[0]);
+    toRow = row_char - 'A';
+
+    col_string = "";
+
+    if (toCoord.length() == 2) {
+        col_string = toCoord[1];
+    }
+    else if (toCoord.length() == 3) {
+        col_string = toCoord[1];
+        col_string += toCoord[2];
+    }
+    else {
+        cout << "Invalid coordinate! Please enter a valid coordinate." << endl;
+        return false;
+    }
+
+    if (col_string == "1") {
+        toCol = 0;
+    }
+    else if (col_string == "2") {
+        toCol = 1;
+    }
+    else if (col_string == "3") {
+        toCol = 2;
+    }
+    else if (col_string == "4") {
+        toCol = 3;
+    }
+    else if (col_string == "5") {
+        toCol = 4;
+    }
+    else if (col_string == "6") {
+        toCol = 5;
+    }
+    else if (col_string == "7") {
+        toCol = 6;
+    }
+    else if (col_string == "8") {
+        toCol = 7;
+    }
+    else if (col_string == "9") {
+        toCol = 8;
+    }
+    else if (col_string == "10") {
+        toCol = 9;
+    }
+    else {
+        cout << "Invalid column number! Please enter a number between 1 and 10." << endl;
+        return false;
+    }
+
+    // check if the destination is on the board
+    if (toRow < 0 || toRow > boardSize-1 || toCol < 0 || toCol > boardSize-1) {
+        cout << "Invalid! That space is off the board. Try again." << endl;
+        return false;
+    }
+
+    // check if is the destination is occupied or empty
+    if (board[toRow][toCol] != ' ') {
+        cout << "Invalid! It's occupied! Try again." << endl;
+        return false;
+    }
+
+    return true;
+}
+
+
 void movementLogic(int currentPlayer, char **board, int boardSize) {
-    string fromCoord, toCoord;
-    // bool validMove = false;
-    string col_string = "";
-    int row = 0, col = 0;
+    string fromCoord, toCoord, col_string = "";
+    int fromRow, toRow, fromCol, toCol;
+
+    cout << "Player " << currentPlayer << " to move!" << endl;
+    if (currentPlayer == 1) {
+        cout << "Your piece is 'o'" << endl;
+    }
+    else {
+        cout << "Your piece is 'x'" << endl;
+    }
+
+    bool successMove = false;
 
     do {
-        cout << "Player " << currentPlayer << " to move!" << endl;
-        if (currentPlayer == 1) {
-            cout << "Your piece is 'o'" << endl;
-        }
-        else {
-            cout << "Your piece is 'x'" << endl;
-        }
         cout << "Enter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
-        cout << "From which coordinate: ";
+        cout << "From which coordinate (Please enter the coordinate without any spacing): ";
         cin >> fromCoord;
-
-/*      (this one can prob delete dy ah but im not sure so i leave here first)
-        char row_char = toupper(fromCoord[0]);
-        int row = row_char - 'A';
-        string col_string = ""; // from what i learn online it says that better assign it to empty string good practice wor
-
-        if (fromCoord.length() == 2) {
-            col_string = fromCoord[1];
-        }
-        else if (fromCoord.length() == 3) {
-            col_string = fromCoord[1];
-            col_string += fromCoord[2];
-        }
-        else {
-            cout << "Invalid coordinate! Please enter a valid coordinate." << endl;
+        if (validFromCoord(fromCoord, board, boardSize, col_string, fromRow, fromCol, currentPlayer) == false) {
             continue;
-        }
-
-        int col;
-
-        if (col_string == "1") {
-            col = 0;
-        }
-        else if (col_string == "2") {
-            col = 1;
-        }
-        else if (col_string == "3") {
-            col = 2;
-        }
-        else if (col_string == "4") {
-            col = 3;
-        }
-        else if (col_string == "5") {
-            col = 4;
-        }
-        else if (col_string == "6") {
-            col = 5;
-        }
-        else if (col_string == "7") {
-            col = 6;
-        }
-        else if (col_string == "8") {
-            col = 7;
-        }
-        else if (col_string == "9") {
-            col = 8;
-        }
-        else if (col_string == "10") {
-            col = 9;
-        }
-        else {
-            cout << "Invalid column number! Please enter a number between 1 and 10." << endl;
-            continue;
-        }
-
-        // check if is the piece on the board
-        if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
-            cout << "Invalid! That space is off the board. Try again." << endl;
-            continue;
-        }
-
-        // check if is the coordinate consist any piece
-        if (board[row][col] == ' ') {
-            cout << "Invalid! There is no piece there. Try again." << endl;
-            continue;
-        }
-
-        // check if currentPlayer moving their own piece
-        char playerPiece;
-
-        if (currentPlayer == 1) {
-            playerPiece = 'o';
-        } else {
-            playerPiece = 'x';
-        }
-
-        if (board[row][col] != playerPiece) {
-            cout << "Invalid! That piece does not belong to you. Try again." << endl;
-            continue;
-        }
-
-        cout << "Valid piece selected at " << row_char << col_string << "!" << endl;
-    */
-       // validMove = true;
-    } while (!validMove(fromCoord, toCoord, board, boardSize, col_string, row, col, currentPlayer));
-
-    do {
-        cout << "Player " << currentPlayer << " to move!" << endl;
-        if (currentPlayer == 1) {
-            cout << "Your piece is 'o'" << endl;
-        }
-        else {
-            cout << "Your piece is 'x'" << endl;
         }
         cout << "Enter the destination coordinate (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
-        cout << "To which coordinate: ";
+        cout << "To which coordinate (Please enter the coordinate without any spacing): ";
         cin >> toCoord;
-    } while (!validMove(fromCoord, toCoord, board, boardSize, col_string, row, col, currentPlayer));
+        if (validToCoord(toCoord, board, boardSize, col_string, toRow, toCol, currentPlayer) == false) {
+            continue;
+        }
+
+        board[toRow][toCol] = board[fromRow][fromCol];
+        board[fromRow][fromCol] = ' ';
+
+        successMove = true;
+    } while (successMove == false);
+
+
 }
