@@ -492,6 +492,16 @@ bool validToCoord(string toCoord, char **board, int boardSize, string col_string
     return true;
 }
 
+void movePiece (int fromRow, int fromCol, int &toRow, int &toCol, char **board, int currentPlayer) {
+    board[toRow][toCol] = board[fromRow][fromCol];
+    board[fromRow][fromCol] = ' ';
+    
+    if (currentPlayer == 1) {
+        board[toRow][toCol] = 'o';
+    } else if (currentPlayer == 2) {
+        board[toRow][toCol] = 'X';
+    }
+}
 
 void movementLogic(int currentPlayer, char **board, int boardSize) {
     string fromCoord, toCoord, col_string = "";
@@ -523,11 +533,13 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             continue;
         }
 
-        board[toRow][toCol] = board[fromRow][fromCol];
-        board[fromRow][fromCol] = ' ';
+        movePiece(fromRow, fromCol, toRow, toCol, board, currentPlayer);
 
         successMove = true;
     } while (successMove == false);
 
-
+    if (successMove) {
+        // Display board
+        cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
+    }
 }
