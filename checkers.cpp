@@ -29,11 +29,11 @@ int main() {
     cin >> gameChoice;
 
     while(gameChoice != "1" && gameChoice != "2" && gameChoice != "x" && gameChoice != "X")
-        {
-            cout << "Invalid choice! Please enter 1, 2 or X." << endl;
-            cout << "Choice: ";
-            cin >> gameChoice;
-        }
+    {
+        cout << "Invalid choice! Please enter 1, 2 or X." << endl;
+        cout << "Choice: ";
+        cin >> gameChoice;
+    }
 
     while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
     {
@@ -191,11 +191,33 @@ int main() {
             currentPlayer = 1;
         }
 
-        // Display board
-        cout << endl;
+        bool gameOver = false;
 
-        for(int row = 0; row < boardSize; row++)
-        {
+        while (!gameOver) {
+            // Display board
+            cout << endl;
+
+            for(int row = 0; row < boardSize; row++)
+            {
+                cout << " ";
+
+                for(int i = 0; i < boardSize * 4 + 1; i++)
+                {
+                    cout << "-";
+                }
+
+                cout << endl;
+
+                cout << "|";
+
+                for(int col = 0; col < boardSize; col++)
+                {
+                    cout << " " << board[row][col] << " |";
+                }
+
+                cout << " " << char('A' + row) << endl;
+            }
+
             cout << " ";
 
             for(int i = 0; i < boardSize * 4 + 1; i++)
@@ -205,59 +227,39 @@ int main() {
 
             cout << endl;
 
-            cout << "|";
+            cout << " ";
 
-            for(int col = 0; col < boardSize; col++)
+            for(int col = 1; col <= boardSize; col++)
             {
-                cout << " " << board[row][col] << " |";
+                cout << " " << col << "  ";
             }
 
-            cout << " " << char('A' + row) << endl;
+            cout << endl << endl;
+
+            movementLogic(currentPlayer, board, boardSize);
+            // check has anyone win the game
+            // if not then switch to the next player
+            switchPlayer(currentPlayer);
         }
-
-        cout << " ";
-
-        for(int i = 0; i < boardSize * 4 + 1; i++)
+        // Free dynamic memory
+        if(board != NULL)
         {
-            cout << "-";
+            for(int row = 0; row < boardSize; row++)
+            {
+                delete[] board[row];
+            }
+
+            delete[] board;
         }
-
-        cout << endl;
-
-        cout << " ";
-
-        for(int col = 1; col <= boardSize; col++)
-        {
-            cout << " " << col << "  ";
-        }
-
-        cout << endl << endl;
-
-        movementLogic(currentPlayer, board, boardSize);
-        // check has anyone win the game
-        // if not then switch to the next player
-        switchPlayer(currentPlayer);
-
-
-        }
-
-    return 0;
+        return 0;
     }
 }
 
-    // Free dynamic memory
-    if(board != NULL)
-    {
-        for(int row = 0; row < boardSize; row++)
-        {
-            delete[] board[row];
-        }
 
-        delete[] board;
-    }
 
-    return 0;
-}
+
+
+
 
 void switchPlayer(int &currentPlayer)
 {
