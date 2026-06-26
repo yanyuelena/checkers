@@ -198,34 +198,31 @@ int main() {
             currentPlayer = 1;
         }
 
-        bool gameOver = false;
+        // Display board
+        cout << endl;
 
-        while (!gameOver) {
-            // Display board
-            cout << endl;
+        for(int row = 0; row < boardSize; row++)
+        {
+            cout << " ";
 
-            for(int row = 0; row < boardSize; row++)
+            for(int i = 0; i < boardSize * 4 + 1; i++)
             {
-                cout << " ";
-
-                for(int i = 0; i < boardSize * 4 + 1; i++)
-                {
-                    cout << "-";
-                }
-
-                cout << endl;
-
-                cout << "|";
-
-                for(int col = 0; col < boardSize; col++)
-                {
-                    cout << " " << board[row][col] << " |";
-                }
-
-                cout << " " << char('A' + row) << endl;
+                cout << "-";
             }
 
-            cout << " ";
+            cout << endl;
+
+            cout << "|";
+
+            for(int col = 0; col < boardSize; col++)
+            {
+                cout << " " << board[row][col] << " |";
+            }
+
+            cout << " " << char('A' + row) << endl;
+        }
+
+        cout << " ";
 
             for(int i = 0; i < boardSize * 4 + 1; i++)
             {
@@ -275,12 +272,13 @@ int main() {
 
 
 
-void switchPlayer(int &currentPlayer)
-{
-    if (currentPlayer == 1)
+void switchPlayer(int &currentPlayer) {
+    if (currentPlayer == 1) {
         currentPlayer = 2;
-    else
+    }
+    else {
         currentPlayer = 1;
+    }
 }
 
 bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int currentPlayer)
@@ -339,9 +337,8 @@ void saveGame(char **board, int boardSize, int currentPlayer)
     cout << "Game saved successfully!" << endl;
 }
 
-// check if it's a valid move, function to be called in movementLogic
-bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer) {
-
+    // check if it's a valid move, function to be called in movementLogic
+    bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer) {
     if (fromCoord == "x" || fromCoord == "X" ) {
         exit(0);
     }
@@ -431,8 +428,7 @@ bool validFromCoord(string fromCoord, char **board, int boardSize, string col_st
     return true;
 }
 
-bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer) {
-
+    bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer) {
     if (toCoord == "x" || toCoord == "X") {
         exit(0);
     }
@@ -548,7 +544,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
                     validDiagonal = true;
                 }
             }
-                else if (toRow == fromRow + 2) {
+            else if (toRow == fromRow + 2) {
                 if (toCol == fromCol + 2 || toCol == fromCol - 2) {
                     // Find the coordinate of the piece we are jumping over
                     middleRow = fromRow + 1;
@@ -609,6 +605,99 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
 
         board[toRow][toCol] = board[fromRow][fromCol];
         board[fromRow][fromCol] = ' ';
+
+        if (isJump == true) {
+            board[middleRow][middleCol] = ' ';
+            cout << "\n*** You captured an opponent's piece! ***" << endl;
+
+            // elimination ++;
+            int currentRound = 1;
+
+            // force jump check
+            bool continousJump = true;
+            
+            int currentRow = toRow;
+            int currentCol = toCol; // elimination count for current jump sequence, so i can put diff sentences hahahwheaha
+
+            while (continousJump) {
+                continousJump = false;
+
+                int directionCols[2] = {currentCol - 2, currentCol + 2};
+
+                for (int i = 0; i < 2; i++) {
+                    int nextRow = 0;
+                    int nextCol = directionCols[i];
+
+                    if (currentPlayer == 1) {
+                        nextRow = currentRow + 2;
+                    } else if (currentPlayer == 2) {
+                        nextRow = currentRow - 2;
+                    }
+
+                    if (nextRow >= 0 && nextRow < 10 && nextCol >= 0 && nextCol < 10) {
+                        if (board[nextRow][nextCol] == ' ') {
+                            int nextMidRow = 0;
+                            int nextMidCol = 0;
+
+                            if (currentPlayer == 1) {
+                                nextMidRow = currentRow + 1;
+                                if (nextCol == currentCol + 2) {
+                                    nextMidCol = currentCol + 1;
+                                } else {
+                                    nextMidCol = currentCol - 1;
+                                }
+
+                                if (board[nextMidRow][nextMidCol] == 'x' || board[nextMidRow][nextMidCol] == 'X') {
+                                    board[nextRow][nextCol] = board[currentRow][currentCol];
+                                    board[currentRow][currentCol] = ' ';
+                                    board[nextMidRow][nextMidCol] = ' ';
+
+                                    currentRound ++;
+                                    // elimination ++;
+
+                                    currentRow = nextRow;
+                                    currentCol = nextCol;
+                                    continousJump = true;
+                                    break;
+                                }
+                            } 
+
+                            else if (currentPlayer == 2) {
+                                nextMidRow = currentRow - 1;
+                                if (nextCol == currentCol + 2) {
+                                    nextMidCol = currentCol + 1;
+                                } else {
+                                    nextMidCol = currentCol - 1;
+                                }
+
+                                if (board[nextMidRow][nextMidCol] == 'o' || board[nextMidRow][nextMidCol] == 'O') {
+                                    board[nextRow][nextCol] = board[currentRow][currentCol];
+                                    board[currentRow][currentCol] = ' ';
+                                    board[nextMidRow][nextMidCol] = ' ';
+
+                                    currentRound ++;
+                                    // elimination ++;
+
+                                    currentRow = nextRow;
+                                    currentCol = nextCol;
+                                    continousJump = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                // diff outputs
+                if (currentRound == 2) {
+                    cout << "\nReverse Capture! Both pieces are destroyed!" << endl;
+                    cout << currentRound << endl;
+                }
+                else if (currentRound == 3) {
+                    cout << "\nBoomerang Active! Your piece returns to safety." << endl;
+                    cout << currentRound << endl;
+                }
+            }
+        }
 
         successMove = true;
 
