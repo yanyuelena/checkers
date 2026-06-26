@@ -35,8 +35,7 @@ int main() {
         cin >> gameChoice;
     }
 
-    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
-    {
+    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X") {
         // Exit
         if(gameChoice == "x" || gameChoice == "X")
         {
@@ -101,9 +100,7 @@ int main() {
 
             while(!validSize)
             {
-                cout <<"Welcome to Checkers Game !" << endl;
-                cout << "Enter your desired board size (1-5)" << endl;
-                cout << "(Enter X to exit game)" << endl;
+                cout <<"\nWelcome to Checkers Game !" << endl;
                 cout << "1. 6x6 board" << endl;
                 cout << "2. 7x7 board" << endl;
                 cout << "3. 8x8 board" << endl;
@@ -194,33 +191,11 @@ int main() {
             currentPlayer = 1;
         }
 
-        bool gameOver = false;
+        // Display board
+        cout << endl;
 
-        while (!gameOver) {
-            // Display board
-            cout << endl;
-
-            for(int row = 0; row < boardSize; row++)
-            {
-                cout << " ";
-
-                for(int i = 0; i < boardSize * 4 + 1; i++)
-                {
-                    cout << "-";
-                }
-
-                cout << endl;
-
-                cout << "|";
-
-                for(int col = 0; col < boardSize; col++)
-                {
-                    cout << " " << board[row][col] << " |";
-                }
-
-                cout << " " << char('A' + row) << endl;
-            }
-
+        for(int row = 0; row < boardSize; row++)
+        {
             cout << " ";
 
             for(int i = 0; i < boardSize * 4 + 1; i++)
@@ -230,11 +205,11 @@ int main() {
 
             cout << endl;
 
-            cout << " ";
+            cout << "|";
 
-            for(int col = 1; col <= boardSize; col++)
+            for(int col = 0; col < boardSize; col++)
             {
-                cout << " " << col << "  ";
+                cout << " " << board[row][col] << " |";
             }
 
             cout << " " << char('A' + row) << endl;
@@ -250,7 +225,6 @@ int main() {
         bool gameOver = false;
 
         while (!gameOver) {
-
             cout << endl;
 
             cout << " ";
@@ -260,7 +234,6 @@ int main() {
                 cout << " " << col << "  ";
             }
 
-            cout << endl << endl;
 
             cout << endl << endl;
 
@@ -269,39 +242,34 @@ int main() {
             // if not then switch to the next player
             switchPlayer(currentPlayer);
         }
-        // Free dynamic memory
-        if(board != NULL)
-        {
-            for(int row = 0; row < boardSize; row++)
-            {
-                delete[] board[row];
-            }
+    }
 
-            delete[] board;
+    // Free dynamic memory
+    if(board != NULL)
+    {
+        for(int row = 0; row < boardSize; row++)
+        {
+            delete[] board[row];
         }
-        return 0;
+
+        delete[] board;
+    }
+    return 0;
+}
+
+
+
+void switchPlayer(int &currentPlayer) {
+    if (currentPlayer == 1) {
+        currentPlayer = 2;
+    }
+    else {
+        currentPlayer = 1;
     }
 }
 
 
-
-
-
-
-
-void switchPlayer(int &currentPlayer)
-{
-    if (currentPlayer == 1)
-        currentPlayer = 2;
-    else
-        currentPlayer = 1;
-}
-
-
-
-
-void saveGame(char **board, int boardSize, int currentPlayer)
-{
+    void saveGame(char **board, int boardSize, int currentPlayer) {
     ofstream file("savegame.txt");
 
     if(!file)
@@ -332,9 +300,8 @@ void saveGame(char **board, int boardSize, int currentPlayer)
     cout << "Game saved successfully!" << endl;
 }
 
-// check if it's a valid move, function to be called in movementLogic
-bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer) {
-
+    // check if it's a valid move, function to be called in movementLogic
+    bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer) {
     if (fromCoord == "x" || fromCoord == "X" ) {
         exit(0);
     }
@@ -424,8 +391,7 @@ bool validFromCoord(string fromCoord, char **board, int boardSize, string col_st
     return true;
 }
 
-bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer) {
-
+    bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer) {
     if (toCoord == "x" || toCoord == "X") {
         exit(0);
     }
@@ -517,7 +483,6 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
 
     do {
         cout << "\nEnter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
-        cout << "Enter the coordinate of the piece that you would like to move (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
         cout << "From which coordinate (Please enter the coordinate without any spacing): ";
         cin >> fromCoord;
@@ -525,7 +490,6 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             continue;
         }
         cout << "\nEnter the destination coordinate (eg. D4)" << endl <<
-        cout << "Enter the destination coordinate (eg. D4)" << endl <<
                 "(Enter S to save and X to exit)" << endl;
         cout << "To which coordinate (Please enter the coordinate without any spacing): ";
         cin >> toCoord;
@@ -543,7 +507,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
                     validDiagonal = true;
                 }
             }
-                else if (toRow == fromRow + 2) {
+            else if (toRow == fromRow + 2) {
                 if (toCol == fromCol + 2 || toCol == fromCol - 2) {
                     // Find the coordinate of the piece we are jumping over
                     middleRow = fromRow + 1;
