@@ -269,7 +269,8 @@ void switchPlayer(int &currentPlayer) {
 }
 
 
-    void saveGame(char **board, int boardSize, int currentPlayer) {
+void saveGame(char **board, int boardSize, int currentPlayer)
+{
     ofstream file("savegame.txt");
 
     if(!file)
