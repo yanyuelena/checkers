@@ -588,5 +588,35 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
     if (successMove) {
         // Display board
         cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
+
+        // --- DISPLAY BOARD BLOCK ---
+        cout << endl;
+        for(int row = 0; row < boardSize; row++)
+        {
+            cout << " ";
+            for(int i = 0; i < boardSize * 4 + 1; i++) {
+                cout << "-";
+            }
+            cout << endl;
+            cout << "|";
+
+            for(int col = 0; col < boardSize; col++) {
+                cout << " " << board[row][col] << " |";
+            }
+            cout << " " << char('A' + row) << endl;
+        }
+
+        cout << " ";
+        for(int i = 0; i < boardSize * 4 + 1; i++) {
+            cout << "-";
+        }
+        cout << endl;
+        cout << " ";
+
+        for(int col = 1; col <= boardSize; col++) {
+            cout << " " << col << "  ";
+        }
+        cout << endl << endl;
     }
 }
+
