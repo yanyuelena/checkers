@@ -7,7 +7,7 @@ using namespace std;
 
 void saveGame(char **board, int boardSize, int currentPlayer);
 // bool checkWinning();
-// void switchPlayer(int &currentPlayer);
+void switchPlayer(int &currentPlayer);
 // bool checkEndPoint();
 void movementLogic(int currentPlayer, char **board, int boardSize);
 
@@ -237,26 +237,7 @@ int main() {
 
         movementLogic(currentPlayer, board, boardSize);
         }
-
-        /* if(checkEndPoint())
-        {
-            // Superpower selection logic here
-        }
-
-        if(checkWinning())
-        {
-            cout << "Game Over! Player " << currentPlayer << " wins!" << endl;
-
-            break;
-        }
-        else
-        {
-            switchPlayer(currentPlayer);
-        }
-
-        break;
-    }
-    */
+            
     return 0;
     }
 }
@@ -275,7 +256,13 @@ int main() {
     return 0;
 }
 
-
+void switchPlayer(int &currentPlayer)
+{
+    if (currentPlayer == 1)
+        currentPlayer = 2;
+    else
+        currentPlayer = 1;
+}
 
 
 
@@ -315,7 +302,6 @@ void saveGame(char **board, int boardSize, int currentPlayer)
 void movementLogic(int currentPlayer, char **board, int boardSize) {
     string fromCoord, toCoord;
     bool validMove = false;
-
     while (!validMove) {
         cout << "Player " << currentPlayer << " to move!" << endl;
         if (currentPlayer == 1) {
@@ -352,7 +338,6 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             cout << "Invalid coordinate! Please enter a valid coordinate." << endl;
             continue;
         }
-
         int col;
 
         if (col_string == "1") {
