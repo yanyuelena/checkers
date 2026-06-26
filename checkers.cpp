@@ -101,7 +101,7 @@ int main() {
 
             while(!validSize)
             {
-                cout <<"Welcome to Checkers Game !" << endl;
+                cout <<"\nWelcome to Checkers Game !" << endl;
                 cout << "1. 6x6 board" << endl;
                 cout << "2. 7x7 board" << endl;
                 cout << "3. 8x8 board" << endl;
@@ -258,11 +258,6 @@ int main() {
 }
 
 
-
-
-
-
-
 void switchPlayer(int &currentPlayer)
 {
     if (currentPlayer == 1)
@@ -270,8 +265,6 @@ void switchPlayer(int &currentPlayer)
     else
         currentPlayer = 1;
 }
-
-
 
 
 void saveGame(char **board, int boardSize, int currentPlayer)
