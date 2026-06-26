@@ -101,7 +101,7 @@ int main() {
 
             while(!validSize)
             {
-                cout << "\nEnter your desired board size (1-5)" << endl;
+                cout << "Enter your desired board size (1-5)" << endl;
                 cout << "(Enter X to exit game)" << endl;
                 cout << "1. 6x6 board" << endl;
                 cout << "2. 7x7 board" << endl;
@@ -574,5 +574,35 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
     if (successMove) {
         // Display board
         cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
+
+        // --- DISPLAY BOARD BLOCK ---
+        cout << endl;
+        for(int row = 0; row < boardSize; row++)
+        {
+            cout << " ";
+            for(int i = 0; i < boardSize * 4 + 1; i++) {
+                cout << "-";
+            }
+            cout << endl;
+            cout << "|";
+
+            for(int col = 0; col < boardSize; col++) {
+                cout << " " << board[row][col] << " |";
+            }
+            cout << " " << char('A' + row) << endl;
+        }
+
+        cout << " ";
+        for(int i = 0; i < boardSize * 4 + 1; i++) {
+            cout << "-";
+        }
+        cout << endl;
+        cout << " ";
+
+        for(int col = 1; col <= boardSize; col++) {
+            cout << " " << col << "  ";
+        }
+        cout << endl << endl;
     }
 }
+
