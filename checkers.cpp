@@ -479,17 +479,6 @@ bool validToCoord(string toCoord, char **board, int boardSize, string col_string
     return true;
 }
 
-void movePiece (int fromRow, int fromCol, int &toRow, int &toCol, char **board, int currentPlayer) {
-    board[toRow][toCol] = board[fromRow][fromCol];
-    board[fromRow][fromCol] = ' ';
-
-    if (currentPlayer == 1) {
-        board[toRow][toCol] = 'o';
-    } else if (currentPlayer == 2) {
-        board[toRow][toCol] = 'X';
-    }
-}
-
 void movementLogic(int currentPlayer, char **board, int boardSize) {
     string fromCoord, toCoord, col_string = "";
     int fromRow, toRow, fromCol, toCol;
@@ -520,9 +509,80 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             continue;
         }
 
-        movePiece(fromRow, fromCol, toRow, toCol, board, currentPlayer);
+        bool validDiagonal = false, isJump = false;
+        int middleRow = 0, middleCol = 0;
+
+        if (currentPlayer == 1) {
+            // normal moving 1 step
+            if (toRow == fromRow +1) {
+                if (toCol == fromCol +1 || toCol == fromCol -1 ) {
+                    validDiagonal = true;
+                }
+            }
+                else if (toRow == fromRow + 2) {
+                if (toCol == fromCol + 2 || toCol == fromCol - 2) {
+                    // Find the coordinate of the piece we are jumping over
+                    middleRow = fromRow + 1;
+                    if (toCol == fromCol + 2) {
+                        middleCol = fromCol + 1;
+                    } // Jumped right
+                    else {
+                        middleCol = fromCol - 1;
+                    }                      // Jumped left
+
+                    // Check if the middle piece belongs to the OPPONENT
+                    if (board[middleRow][middleCol] == 'x' || board[middleRow][middleCol] == 'X') {
+                        validDiagonal = true;
+                        isJump = true; // We successfully ate someone!
+                    } else {
+                        cout << "Invalid! You can only jump over an opponent's piece." << endl;
+                        continue;
+                    }
+                }
+            }
+        }
+
+        // --- PLAYER 2 ('x') MOVES UP (Row - 1 or Row - 2) ---
+        else if (currentPlayer == 2) {
+
+            // Rule 1: Normal 1-Step Move
+            if (toRow == fromRow - 1) {
+                if (toCol == fromCol + 1 || toCol == fromCol - 1) {
+                    validDiagonal = true;
+                }
+            }
+            // Rule 2: 2-Step Jump (Eating)
+            else if (toRow == fromRow - 2) {
+                if (toCol == fromCol + 2 || toCol == fromCol - 2) {
+
+                    // Find the coordinate of the piece we are jumping over
+                    middleRow = fromRow - 1;
+                    if (toCol == fromCol + 2) { middleCol = fromCol + 1; } // Jumped right
+                    else { middleCol = fromCol - 1; }                      // Jumped left
+
+                    // Check if the middle piece belongs to the OPPONENT
+                    if (board[middleRow][middleCol] == 'o' || board[middleRow][middleCol] == 'O') {
+                        validDiagonal = true;
+                        isJump = true;
+                    } else {
+                        cout << "Invalid! You can only jump over an opponent's piece." << endl;
+                        continue;
+                    }
+                }
+            }
+        }
+
+        // If it wasn't a 1-step or a valid 2-step jump, reject it
+        if (validDiagonal == false) {
+            cout << "Invalid move! You must move diagonally forward, or jump an opponent." << endl;
+            continue;
+        }
+
+        board[toRow][toCol] = board[fromRow][fromCol];
+        board[fromRow][fromCol] = ' ';
 
         successMove = true;
+
     } while (successMove == false);
 
     if (successMove) {
