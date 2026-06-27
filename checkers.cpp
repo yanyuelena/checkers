@@ -258,7 +258,7 @@ int main() {
         }
     }
     // Free dynamic memory
-    if(board != NULL)
+    if (board != NULL)
     {
        for(int row = 0; row < boardSize; row++)
          {
@@ -267,9 +267,8 @@ int main() {
 
          delete[] board;
     }
-        return 0;
+       return 0;
 }
-
 
 
 void switchPlayer(int &currentPlayer) {
