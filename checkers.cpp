@@ -8,7 +8,7 @@ using namespace std;
 void saveGame(char **board, int boardSize, int currentPlayer);
 // bool checkWinning();
 void switchPlayer(int &currentPlayer);
-// bool checkEndPoint();
+bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int currentPlayer);
 bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer);
 bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer);
 void movementLogic(int currentPlayer, char **board, int boardSize);
@@ -29,6 +29,13 @@ int main() {
     cin >> gameChoice;
 
     while(gameChoice != "1" && gameChoice != "2" && gameChoice != "x" && gameChoice != "X")
+    {
+        cout << "Invalid choice! Please enter 1, 2 or X." << endl;
+        cout << "Choice: ";
+        cin >> gameChoice;
+    }
+
+    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
     {
         cout << "Invalid choice! Please enter 1, 2 or X." << endl;
         cout << "Choice: ";
@@ -217,14 +224,11 @@ int main() {
 
         cout << " ";
 
-        for(int i = 0; i < boardSize * 4 + 1; i++)
-        {
-            cout << "-";
-        }
+            for(int i = 0; i < boardSize * 4 + 1; i++)
+            {
+                cout << "-";
+            }
 
-        bool gameOver = false;
-
-        while (!gameOver) {
             cout << endl;
 
             cout << " ";
@@ -234,7 +238,6 @@ int main() {
                 cout << " " << col << "  ";
             }
 
-
             cout << endl << endl;
 
             movementLogic(currentPlayer, board, boardSize);
@@ -242,19 +245,29 @@ int main() {
             // if not then switch to the next player
             switchPlayer(currentPlayer);
         }
-    }
 
+        bool gameOver = false;
+
+        while (!gameOver)
+        {
+            cout << endl << endl;
+
+            movementLogic(currentPlayer, board, boardSize);
+            // if not then switch to the next player
+            switchPlayer(currentPlayer);
+        }
+    }
     // Free dynamic memory
     if(board != NULL)
     {
-        for(int row = 0; row < boardSize; row++)
-        {
-            delete[] board[row];
-        }
+       for(int row = 0; row < boardSize; row++)
+         {
+             delete[] board[row];
+         }
 
-        delete[] board;
+         delete[] board;
     }
-    return 0;
+        return 0;
 }
 
 
@@ -268,6 +281,29 @@ void switchPlayer(int &currentPlayer) {
     }
 }
 
+bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int currentPlayer)
+{
+    if (currentPlayer == 1 && toRow == boardSize - 1)
+    {
+        if (board[toRow][toCol] == 'o')
+        {
+            board[toRow][toCol] = 'O';
+            cout << "Congrats to Player 1's piece became a King!\n";
+            return true;
+        }
+    }
+
+    else if (currentPlayer == 2 && toRow == 0)
+    {
+        if (board[toRow][toCol] == 'x')
+        {
+            board[toRow][toCol] = 'X';
+            cout << "Congrats to Player 2's piece became a King!\n";
+            return true;
+        }
+    }
+    return false;
+}
 
 void saveGame(char **board, int boardSize, int currentPlayer)
 {
@@ -573,6 +609,94 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
         if (isJump == true) {
             board[middleRow][middleCol] = ' ';
             cout << "\n*** You captured an opponent's piece! ***" << endl;
+
+            // elimination ++;
+            int currentRound = 1;
+
+            // force jump check
+            bool continousJump = true;
+            
+            int currentRow = toRow;
+            int currentCol = toCol; // elimination count for current jump sequence, so i can put diff sentences hahahwheaha
+
+            while (continousJump) {
+                continousJump = false;
+
+                int directionCols[2] = {currentCol - 2, currentCol + 2};
+
+                for (int i = 0; i < 2; i++) {
+                    int nextRow = 0;
+                    int nextCol = directionCols[i];
+
+                    if (currentPlayer == 1) {
+                        nextRow = currentRow + 2;
+                    } else if (currentPlayer == 2) {
+                        nextRow = currentRow - 2;
+                    }
+
+                    if (nextRow >= 0 && nextRow < 10 && nextCol >= 0 && nextCol < 10) {
+                        if (board[nextRow][nextCol] == ' ') {
+                            int nextMidRow = 0;
+                            int nextMidCol = 0;
+
+                            if (currentPlayer == 1) {
+                                nextMidRow = currentRow + 1;
+                                if (nextCol == currentCol + 2) {
+                                    nextMidCol = currentCol + 1;
+                                } else {
+                                    nextMidCol = currentCol - 1;
+                                }
+
+                                if (board[nextMidRow][nextMidCol] == 'x' || board[nextMidRow][nextMidCol] == 'X') {
+                                    board[nextRow][nextCol] = board[currentRow][currentCol];
+                                    board[currentRow][currentCol] = ' ';
+                                    board[nextMidRow][nextMidCol] = ' ';
+
+                                    currentRound ++;
+                                    // elimination ++;
+
+                                    currentRow = nextRow;
+                                    currentCol = nextCol;
+                                    continousJump = true;
+                                    break;
+                                }
+                            } 
+
+                            else if (currentPlayer == 2) {
+                                nextMidRow = currentRow - 1;
+                                if (nextCol == currentCol + 2) {
+                                    nextMidCol = currentCol + 1;
+                                } else {
+                                    nextMidCol = currentCol - 1;
+                                }
+
+                                if (board[nextMidRow][nextMidCol] == 'o' || board[nextMidRow][nextMidCol] == 'O') {
+                                    board[nextRow][nextCol] = board[currentRow][currentCol];
+                                    board[currentRow][currentCol] = ' ';
+                                    board[nextMidRow][nextMidCol] = ' ';
+
+                                    currentRound ++;
+                                    // elimination ++;
+
+                                    currentRow = nextRow;
+                                    currentCol = nextCol;
+                                    continousJump = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                // diff outputs
+                if (currentRound == 2) {
+                    cout << "\nReverse Capture! Both pieces are destroyed!" << endl;
+                    cout << currentRound << endl;
+                }
+                else if (currentRound == 3) {
+                    cout << "\nBoomerang Active! Your piece returns to safety." << endl;
+                    cout << currentRound << endl;
+                }
+            }
         }
 
         successMove = true;
@@ -580,9 +704,9 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
     } while (successMove == false);
 
     if (successMove) {
-        // Display board
+        // Display board2
         cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
-
+        checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
         // --- DISPLAY BOARD BLOCK ---
         cout << endl;
         for(int row = 0; row < boardSize; row++)
@@ -612,4 +736,5 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
         }
         cout << endl << endl;
     }
+    checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
 }
