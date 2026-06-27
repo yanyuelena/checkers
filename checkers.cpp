@@ -26,7 +26,6 @@ int main()
 {
     int currentPlayer = 1;
     int boardSize = 0;
-    bool validSize = false;
     bool savedFile = false;
     char **board = NULL;
     string sizeChoice;
@@ -106,7 +105,7 @@ int main()
     // New game
     if(gameChoice == "2")
     {
-        validSize = false;
+        bool validSize = false;
 
         while(!validSize)
         {
