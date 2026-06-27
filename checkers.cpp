@@ -6,13 +6,13 @@ using namespace std;
 
 
 void saveGame(char **board, int boardSize, int currentPlayer);
-// bool checkWinning();
 void switchPlayer(int &currentPlayer);
 bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int currentPlayer);
 bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer);
 bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer);
 void movementLogic(int currentPlayer, char **board, int boardSize);
 bool gameOver = false;
+bool winningCondition(char **board, int boardSize);
 
 int main() {
     int currentPlayer = 1;
@@ -215,8 +215,10 @@ int main() {
         for(int col = 1; col <= boardSize; col++) cout << " " << col << "  ";
         cout << endl << endl;
 
+        if (winningCondition(board, boardSize)) {
+            break;
+        }
         movementLogic(currentPlayer, board, boardSize);
-
         switchPlayer(currentPlayer);
     }
 
@@ -230,7 +232,36 @@ int main() {
     return 0;
 }
 
+bool winningCondition(char **board, int boardSize) {
+    bool hasO = false;
+    bool hasX = false;
 
+    for (int row = 0; row < boardSize; row++) {
+        for (int col = 0; col < boardSize; col++) {
+            if (board[row][col] == 'o' || board[row][col] == 'O') {
+                hasO = true;
+            }
+            if (board[row][col] == 'x' || board[row][col] == 'X') {
+                hasX = true;
+            }
+        }
+    }
+    if (!hasO) {
+        cout <<"\n ===================================================" << endl;
+        cout <<   "          CONGRATULATIONS! PLAYER 2 WINS!!         " << endl;
+        cout <<" ===================================================" << endl;
+        gameOver = true;
+        return true;
+    }
+    if (!hasX) {
+        cout <<"\n ===================================================" << endl;
+        cout <<   "          CONGRATULATIONS! PLAYER 1 WINS!!         " << endl;
+        cout <<" ===================================================" << endl;
+        gameOver = true;
+        return true;
+    }
+    return false;
+}
 
 
 void switchPlayer(int &currentPlayer) {
@@ -721,7 +752,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
     if (successMove) {
         // Display board2
         cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
-        checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
 
     }
+    checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
 }
