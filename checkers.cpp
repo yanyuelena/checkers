@@ -569,13 +569,13 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             cout << "\n*** You captured an opponent's piece! ***" << endl;
 
             // elimination ++;
-            int currentRound = 1;
+            int currentRound = 1; // elimination count for current jump sequence, so i can put diff sentences hahahwheaha
 
             // force jump check
             bool continousJump = true;
 
             int currentRow = toRow;
-            int currentCol = toCol; // elimination count for current jump sequence, so i can put diff sentences hahahwheaha
+            int currentCol = toCol; 
 
             while (continousJump) {
                 continousJump = false;
@@ -645,15 +645,15 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
                         }
                     }
                 }
-                // diff outputs
-                if (currentRound == 2) {
-                    cout << "\nReverse Capture! Both pieces are destroyed!" << endl;
-                    cout << currentRound << endl;
-                }
-                else if (currentRound == 3) {
-                    cout << "\nBoomerang Active! Your piece returns to safety." << endl;
-                    cout << currentRound << endl;
-                }
+            }
+            // diff outputs
+            if (currentRound == 2) {
+                cout << "\n--- Another piece available for capture! **Auto-capture activated!** ---" << endl;
+                cout << "Total captures this turn: " << currentRound << endl <<endl;
+            }
+            else if (currentRound == 3) {
+                cout << "\n--- More than one piece available for capture! **Auto-capture activated!** ---" << endl;
+                cout << "Total captures this turn: " << currentRound << endl << endl;
             }
         }
 
