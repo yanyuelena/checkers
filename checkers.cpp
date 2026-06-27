@@ -12,6 +12,7 @@ bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int curren
 bool validFromCoord(string fromCoord, char **board, int boardSize, string col_string, int &fromRow, int &fromCol, int currentPlayer);
 bool validToCoord(string toCoord, char **board, int boardSize, string col_string, int &toRow, int &toCol, int currentPlayer);
 void movementLogic(int currentPlayer, char **board, int boardSize);
+bool gameOver = false;
 
 int main() {
     int currentPlayer = 1;
@@ -230,6 +231,8 @@ int main() {
 }
 
 
+
+
 void switchPlayer(int &currentPlayer) {
     if (currentPlayer == 1) {
         currentPlayer = 2;
@@ -246,9 +249,10 @@ bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int curren
         if (board[toRow][toCol] == 'o')
         {
             board[toRow][toCol] = 'O';
-            cout << "Congrats to Player 1's piece became a King!\n";
+            cout << "Congrats to Player 1's piece became a King!";
             return true;
         }
+
     }
 
     else if (currentPlayer == 2 && toRow == 0)
@@ -256,11 +260,12 @@ bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int curren
         if (board[toRow][toCol] == 'x')
         {
             board[toRow][toCol] = 'X';
-            cout << "Congrats to Player 2's piece became a King!\n";
+            cout << "Congrats to Player 2's piece became a King!";
             return true;
         }
     }
     return false;
+
 }
 
 void saveGame(char **board, int boardSize, int currentPlayer)
@@ -359,11 +364,18 @@ void saveGame(char **board, int boardSize, int currentPlayer)
     char playerPiece;
 
     if (currentPlayer == 1) {
-        playerPiece = 'o'; //when the piece reaches endPoint it will become capital letter
+        if (board[fromRow][fromCol] == 'o'|| board[fromRow][fromCol] == 'O') {
+            return true;
+        }
+        //when the piece reaches endPoint it will become capital letter
         // need to consider this in the future
-    } else {
-        playerPiece = 'x';
     }
+    else if (currentPlayer == 2) {
+        if (board[fromRow][fromCol] == 'x' || board[fromRow][fromCol] == 'X') {
+            return true;
+        }
+    }
+
 
     // check if is the piece on the board
     if (fromRow < 0 || fromRow > boardSize-1 || fromCol < 0 || fromCol > boardSize-1) {
@@ -555,6 +567,51 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             }
         }
 
+        char currentPiece = board[fromRow][fromCol];
+        bool isKing = (currentPiece =='O' || currentPiece == 'X');
+
+        if (currentPlayer == 1) {
+            if (toRow == fromRow + 1 || (isKing && toRow == fromRow - 1)) {
+                if (toCol == fromCol + 1 || toCol == fromCol - 1) {
+                    validDiagonal = true;
+                }
+            }
+            else if (isKing && toRow == fromRow - 2) {
+                if (toCol == fromCol + 2 || toCol == fromCol - 2) {
+                    middleRow = fromRow - 1;
+                    middleCol = (fromCol + toCol) / 2;
+
+                    if (board[middleRow][middleCol] == 'X' || board[middleRow][middleCol] == 'x') {
+                        validDiagonal = true;
+                        isJump = true;
+                    } else {
+                        cout << "Invalid! You can only jump over an opponent piece." << endl;
+                        continue;
+                    }
+                }
+            }
+        }
+        else if (currentPlayer == 2) {
+            if (toRow == fromRow - 1 || (isKing && toRow == fromRow + 1)) {
+                if (toCol == fromCol + 1 || toCol == fromCol - 1) {
+                    validDiagonal = true;
+                }
+            }
+            else if (isKing && toRow == fromRow + 2) {
+                if (toCol == fromCol + 2 || toCol == fromCol - 2) {
+                    middleRow = fromRow + 1;
+                    middleCol = (fromCol + toCol) / 2;
+
+                    if (board[middleRow][middleCol] == 'O' || board[middleRow][middleCol] == 'o') {
+                        validDiagonal = true;
+                        isJump = true;
+                    } else {
+                        cout << "Invalid! You can only jump over an opponent piece." << endl;
+                        continue;
+                    }
+                }
+            }
+        }
         // If it wasn't a 1-step or a valid 2-step jump, reject it
         if (validDiagonal == false) {
             cout << "Invalid move! You must move diagonally forward, or jump an opponent." << endl;
@@ -575,7 +632,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
             bool continousJump = true;
 
             int currentRow = toRow;
-            int currentCol = toCol; 
+            int currentCol = toCol;
 
             while (continousJump) {
                 continousJump = false;
