@@ -195,7 +195,7 @@ int main() {
     bool gameOver = false;
     while (!gameOver)
     {
-        // Display board
+        // Display board everytime when game still running
         cout << endl;
         for(int row = 0; row < boardSize; row++)
         {
@@ -665,34 +665,6 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
         // Display board2
         cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
         checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
-        // --- DISPLAY BOARD BLOCK ---
-        cout << endl;
-        for(int row = 0; row < boardSize; row++)
-        {
-            cout << " ";
-            for(int i = 0; i < boardSize * 4 + 1; i++) {
-                cout << "-";
-            }
-            cout << endl;
-            cout << "|";
 
-            for(int col = 0; col < boardSize; col++) {
-                cout << " " << board[row][col] << " |";
-            }
-            cout << " " << char('A' + row) << endl;
-        }
-
-        cout << " ";
-        for(int i = 0; i < boardSize * 4 + 1; i++) {
-            cout << "-";
-        }
-        cout << endl;
-        cout << " ";
-
-        for(int col = 1; col <= boardSize; col++) {
-            cout << " " << col << "  ";
-        }
-        cout << endl << endl;
     }
-    checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
 }
