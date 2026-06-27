@@ -35,13 +35,6 @@ int main() {
         cin >> gameChoice;
     }
 
-    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X")
-    {
-        cout << "Invalid choice! Please enter 1, 2 or X." << endl;
-        cout << "Choice: ";
-        cin >> gameChoice;
-    }
-
     while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X") {
         // Exit
         if(gameChoice == "x" || gameChoice == "X")
@@ -256,7 +249,7 @@ int main() {
             // if not then switch to the next player
             switchPlayer(currentPlayer);
         }
-    }
+
     // Free dynamic memory
     if (board != NULL)
     {
@@ -614,7 +607,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
 
             // force jump check
             bool continousJump = true;
-            
+
             int currentRow = toRow;
             int currentCol = toCol; // elimination count for current jump sequence, so i can put diff sentences hahahwheaha
 
@@ -659,7 +652,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
                                     continousJump = true;
                                     break;
                                 }
-                            } 
+                            }
 
                             else if (currentPlayer == 2) {
                                 nextMidRow = currentRow - 1;
