@@ -35,232 +35,198 @@ int main() {
         cin >> gameChoice;
     }
 
-    while(gameChoice == "1" || gameChoice == "2" || gameChoice == "x" || gameChoice == "X") {
-        // Exit
-        if(gameChoice == "x" || gameChoice == "X")
+    // exit
+    if(gameChoice == "x" || gameChoice == "X")
+    {
+        return 0;
+    }
+
+    // load game
+    if(gameChoice == "1")
+    {
+        ifstream file("savegame.txt");
+        if(file)
         {
-            return 0;
-        }
+            savedFile = true;
+            file >> boardSize;
+            file >> currentPlayer;
 
-        // Load Game
-        if(gameChoice == "1")
-        {
-            ifstream file("savegame.txt");
-
-            if(file)
-            {
-                savedFile = true;
-
-                file >> boardSize;
-                file >> currentPlayer;
-
-                // Allocate memory for the board
-                board = new char*[boardSize];
-                for(int row = 0; row < boardSize; row++)
-                {
-                    board[row] = new char[boardSize];
-                }
-
-                // Read the board normally using standard streams
-                for(int row = 0; row < boardSize; row++)
-                {
-                    for(int col = 0; col < boardSize; col++)
-                    {
-                        char temp;
-                        file >> temp; // Read the next character, automatically skipping whitespace dividers
-
-                        // Convert placeholder back into a standard space
-                        if (temp == '.') {
-                            board[row][col] = ' '; // Convert '.' placeholder back to a clean blank tile
-                        } else {
-                            board[row][col] = temp; // Assign 'X' or 'O' directly to the board
-                        }
-                    }
-                }
-
-                file.close();
-
-                cout << "Saved game loaded!" << endl;
-                cout << "Continue previous game!" << endl;
-            }
-            else
-            {
-                cout << "No saved game found!" << endl;
-                cout << "Let's start a new game!" << endl;
-
-                gameChoice = "2";
-            }
-        }
-
-
-        // New Game
-        if(gameChoice == "2")
-        {
-            validSize = false;
-
-            while(!validSize)
-            {
-                cout <<"\nWelcome to Checkers Game !" << endl;
-                cout << "1. 6x6 board" << endl;
-                cout << "2. 7x7 board" << endl;
-                cout << "3. 8x8 board" << endl;
-                cout << "4. 9x9 board" << endl;
-                cout << "5. 10x10 board" << endl;
-                cout << "(Enter X to exit game)" << endl;
-                cout << "Enter your desired board size (1-5)" << endl;
-                cin >> sizeChoice;
-
-                if(sizeChoice == "X" || sizeChoice == "x")
-                {
-                    return 0;
-                }
-
-                switch(sizeChoice[0])
-                {
-                    case '1':
-                        boardSize = 6;
-                        validSize = true;
-                        break;
-
-                    case '2':
-                        boardSize = 7;
-                        validSize = true;
-                        break;
-
-                    case '3':
-                        boardSize = 8;
-                        validSize = true;
-                        break;
-
-                    case '4':
-                        boardSize = 9;
-                        validSize = true;
-                        break;
-
-                    case '5':
-                        boardSize = 10;
-                        validSize = true;
-                        break;
-
-                    default:
-                        cout << "Please enter a valid number." << endl;
-                }
-            }
-
+            // Allocate memory for the board
             board = new char*[boardSize];
-
             for(int row = 0; row < boardSize; row++)
             {
                 board[row] = new char[boardSize];
             }
 
+            // Read the board normally using standard streams
             for(int row = 0; row < boardSize; row++)
             {
                 for(int col = 0; col < boardSize; col++)
                 {
-                    board[row][col] = ' ';
-                }
-            }
+                    char temp;
+                    file >> temp; // Read the next character, automatically skipping whitespace dividers
 
-            // O pieces at top
-            for(int row = 0; row < 2; row++)
-            {
-                for(int col = 0; col < boardSize; col++)
-                {
-                    if((row + col) % 2 == 0)
+                    // Convert placeholder back into a standard space
+                    if (temp == '.')
                     {
-                        board[row][col] = 'o';
+                        board[row][col] = ' ';
+                    }
+
+                    else
+                    {
+                        board[row][col] = temp;
                     }
                 }
             }
 
-            // X pieces at bottom
-            for(int row = boardSize - 2;
-                row < boardSize;
-                row++)
+            file.close();
+
+            cout << "Saved game loaded!" << endl;
+            cout << "Continue previous game!" << endl;
+        }
+        else
+        {
+            cout << "No saved game found!" << endl;
+            cout << "Let's start a new game!" << endl;
+
+            gameChoice = "2";
+        }
+    }
+
+    // New game
+    if(gameChoice == "2")
+    {
+        validSize = false;
+
+        while(!validSize)
+        {
+            cout <<"\nWelcome to Checkers Game !" << endl;
+            cout << "1. 6x6 board" << endl;
+            cout << "2. 7x7 board" << endl;
+            cout << "3. 8x8 board" << endl;
+            cout << "4. 9x9 board" << endl;
+            cout << "5. 10x10 board" << endl;
+            cout << "(Enter X to exit game)" << endl;
+            cout << "Enter your desired board size (1-5)" << endl;
+            cin >> sizeChoice;
+
+            if(sizeChoice == "X" || sizeChoice == "x")
             {
-                for(int col = 0; col < boardSize; col++)
-                {
-                    if((row + col) % 2 == 0)
-                    {
-                        board[row][col] = 'x';
-                    }
-                }
+                return 0;
             }
 
-            currentPlayer = 1;
+
+            switch(sizeChoice[0])
+            {
+                case '1':
+                    boardSize = 6;
+                    validSize = true;
+                    break;
+
+                case '2':
+                    boardSize = 7;
+                    validSize = true;
+                    break;
+
+                case '3':
+                    boardSize = 8;
+                    validSize = true;
+                    break;
+
+                case '4':
+                    boardSize = 9;
+                    validSize = true;
+                    break;
+
+                case '5':
+                    boardSize = 10;
+                    validSize = true;
+                    break;
+
+                default:
+                    cout << "Please enter a valid number." << endl;
+            }
         }
 
-        // Display board
-        cout << endl;
+        board = new char*[boardSize];
 
         for(int row = 0; row < boardSize; row++)
         {
-            cout << " ";
+            board[row] = new char[boardSize];
+        }
 
-            for(int i = 0; i < boardSize * 4 + 1; i++)
-            {
-                cout << "-";
-            }
-
-            cout << endl;
-
-            cout << "|";
-
+        for(int row = 0; row < boardSize; row++)
+        {
             for(int col = 0; col < boardSize; col++)
             {
+                board[row][col] = ' ';
+            }
+        }
+
+        // O pieces on top
+        for(int row = 0; row < 2; row++)
+        {
+            for(int col = 0; col < boardSize; col++)
+            {
+                if((row + col) % 2 == 0)
+                {
+                    board[row][col] = 'o';
+                }
+            }
+        }
+
+        // x pieces on bottom
+        for(int row = boardSize - 2; row < boardSize; row++)
+        {
+            for(int col = 0; col < boardSize; col++)
+            {
+                if((row + col) % 2 == 0)
+                {
+                    board[row][col] = 'x';
+                }
+            }
+        }
+
+
+        currentPlayer = 1;
+    }
+
+
+    bool gameOver = false;
+    while (!gameOver)
+    {
+        // Display board everytime when game still running
+        cout << endl;
+        for(int row = 0; row < boardSize; row++)
+        {
+            cout << " ";
+            for(int i = 0; i < boardSize * 4 + 1; i++) cout << "-";
+            cout << endl << "|";
+
+            for(int col = 0; col < boardSize; col++) {
                 cout << " " << board[row][col] << " |";
             }
-
             cout << " " << char('A' + row) << endl;
         }
-
         cout << " ";
+        for(int i = 0; i < boardSize * 4 + 1; i++) cout << "-";
+        cout << endl << " ";
+        for(int col = 1; col <= boardSize; col++) cout << " " << col << "  ";
+        cout << endl << endl;
 
-            for(int i = 0; i < boardSize * 4 + 1; i++)
-            {
-                cout << "-";
-            }
+        movementLogic(currentPlayer, board, boardSize);
 
-            cout << endl;
+        switchPlayer(currentPlayer);
+    }
 
-            cout << " ";
-
-            for(int col = 1; col <= boardSize; col++)
-            {
-                cout << " " << col << "  ";
-            }
-
-            cout << endl << endl;
-
-            movementLogic(currentPlayer, board, boardSize);
-            // check has anyone win the game
-            // if not then switch to the next player
-            switchPlayer(currentPlayer);
-        }
-
-        bool gameOver = false;
-
-        while (!gameOver)
-        {
-            cout << endl << endl;
-
-            movementLogic(currentPlayer, board, boardSize);
-            // if not then switch to the next player
-            switchPlayer(currentPlayer);
-        }
-
-    // Free dynamic memory
     if (board != NULL)
     {
-       for(int row = 0; row < boardSize; row++)
-         {
-             delete[] board[row];
-         }
-
-         delete[] board;
+        for(int row = 0; row < boardSize; row++) {
+            delete[] board[row];
+        }
+        delete[] board;
     }
-       return 0;
+    return 0;
 }
 
 
@@ -699,34 +665,6 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
         // Display board2
         cout << "Player " << currentPlayer << " moved from " << fromCoord << " to " << toCoord << endl;
         checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
-        // --- DISPLAY BOARD BLOCK ---
-        cout << endl;
-        for(int row = 0; row < boardSize; row++)
-        {
-            cout << " ";
-            for(int i = 0; i < boardSize * 4 + 1; i++) {
-                cout << "-";
-            }
-            cout << endl;
-            cout << "|";
 
-            for(int col = 0; col < boardSize; col++) {
-                cout << " " << board[row][col] << " |";
-            }
-            cout << " " << char('A' + row) << endl;
-        }
-
-        cout << " ";
-        for(int i = 0; i < boardSize * 4 + 1; i++) {
-            cout << "-";
-        }
-        cout << endl;
-        cout << " ";
-
-        for(int col = 1; col <= boardSize; col++) {
-            cout << " " << col << "  ";
-        }
-        cout << endl << endl;
     }
-    checkEndPoint(board, boardSize, toRow, toCol, currentPlayer);
 }
