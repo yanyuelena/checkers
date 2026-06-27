@@ -1,3 +1,11 @@
+// *********************************************************
+// Program: checkers.cpp
+// Course: CCP6114 Programming Fundamentals
+// Lecture Class: TC2L
+// Tutorial Class: TT8L
+// Trimester: 2610
+// Information : 261uc250rk | LEE YANYU ELENA | lee.yanyu.elena1@student.mmu.edu.my | +60 11-6435 1727
+// *********************************************************
 #include <iostream>
 #include <fstream>
 #include <string>
