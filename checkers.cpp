@@ -592,7 +592,7 @@ void movementLogic(int currentPlayer, char **board, int boardSize) {
                         nextRow = currentRow - 2;
                     }
 
-                    if (nextRow >= 0 && nextRow < 10 && nextCol >= 0 && nextCol < 10) {
+                    if (nextRow >= 0 && nextRow < boardSize && nextCol >= 0 && nextCol < boardSize) {
                         if (board[nextRow][nextCol] == ' ') {
                             int nextMidRow = 0;
                             int nextMidCol = 0;
