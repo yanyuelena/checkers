@@ -4,7 +4,7 @@
 // Lecture Class: TC2L
 // Tutorial Class: TT8L
 // Trimester: 2610
-// Information : 261uc250rk | LEE YANYU ELENA | lee.yanyu.elena1@student.mmu.edu.my | +60 11-6435 1727
+// Information : 261UC250RK | LEE YANYU ELENA | lee.yanyu.elena1@student.mmu.edu.my | +60 11-6435 1727
 // *********************************************************
 #include <iostream>
 #include <fstream>
@@ -26,7 +26,6 @@ int main()
 {
     int currentPlayer = 1;
     int boardSize = 0;
-    bool savedFile = false;
     char **board = NULL;
     string sizeChoice;
     string gameChoice;
@@ -56,7 +55,6 @@ int main()
         ifstream file("savegame.txt");
         if(file)
         {
-            savedFile = true;
             file >> boardSize;
             file >> currentPlayer;
 
@@ -109,14 +107,14 @@ int main()
 
         while(!validSize)
         {
-            cout <<"\nWelcome to Checkers Game !" << endl;
+            cout <<"\nWelcome to Checkers Game!" << endl;
             cout << "1. 6x6 board" << endl;
             cout << "2. 7x7 board" << endl;
             cout << "3. 8x8 board" << endl;
             cout << "4. 9x9 board" << endl;
             cout << "5. 10x10 board" << endl;
             cout << "(Enter X to exit game)" << endl;
-            cout << "Enter your desired board size (1-5)" << endl;
+            cout << "Enter your desired board size (1-5): ";
             cin >> sizeChoice;
 
             if(sizeChoice == "X" || sizeChoice == "x")
