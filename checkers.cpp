@@ -30,6 +30,17 @@ int main()
     string sizeChoice;
     string gameChoice;
 
+
+    cout << "Game Rules: " << endl;
+    cout << "1. Pieces can move diagonally only." << endl;
+    cout << "2. Pieces can be captured by jumping over them." << endl;
+    cout << "3. Pieces cannot move backwards until reaching the end point." << endl;
+    cout << endl;
+    cout << "King Promotion:\nWhen a piece reaches the opponent's end point, it becomes a King and the player may choose one special power:" << endl;
+    cout << "1. Double Move: Move this King twice every single turn." << endl;
+    cout << "2. Reverse Capture: If captured, both pieces explode." << endl;
+    cout << "3. Boomerang Capture: Stays in spot during captures." << endl;
+    cout << endl;
     cout << "Menu (Enter 'X' to exit game):" << endl;
     cout << "1. Load saved game" << endl;
     cout << "2. Start new game" << endl;
@@ -479,15 +490,15 @@ bool validFromCoord(string fromCoord, char **board, int boardSize, string col_st
     // valid piece selected message
     if (currentPiece == 'O' || currentPiece == 'X')
     {
-        cout << "Selected a [DOUBLE MOVE KING] at " << row_char << col_string << "!" << endl;
+        cout << "Selected a [DOUBLE MOVE KING] at " << row_char << col_string << "! You can move this King twice every single turn." << endl;
     }
     else if (currentPiece == 'R' || currentPiece == 'P')
     {
-        cout << "Selected a [REVERSE CAPTURE KING] at " << row_char << col_string << "!" << endl;
+        cout << "Selected a [REVERSE CAPTURE KING] at " << row_char << col_string << "! If captured, both pieces explode." << endl;
     }
     else if (currentPiece == 'B' || currentPiece == 'V')
     {
-        cout << "Selected a [BOOMERANG KING] at " << row_char << col_string << "!" << endl;
+        cout << "Selected a [BOOMERANG KING] at " << row_char << col_string << "! You can stay in spot during captures." << endl;
     }
     else
     {
