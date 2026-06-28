@@ -449,7 +449,11 @@ bool validFromCoord(string fromCoord, char **board, int boardSize, string col_st
     else if (col_string == "8")  fromCol = 7;
     else if (col_string == "9")  fromCol = 8;
     else if (col_string == "10") fromCol = 9;
-    else return false;
+    else
+    {
+        cout << "Invalid column number! Please enter a number between 1 and 10." << endl;
+        return false;
+    }
 
     // check if is the piece on the board
     if (fromRow < 0 || fromRow > boardSize-1 || fromCol < 0 || fromCol > boardSize-1)
@@ -552,7 +556,11 @@ bool validToCoord(string toCoord, char **board, int boardSize, string col_string
     else if (col_string == "8")  toCol = 7;
     else if (col_string == "9")  toCol = 8;
     else if (col_string == "10") toCol = 9;
-    else return false;
+    else
+    {
+        cout << "Invalid column number! Please enter a number between 1 and 10." << endl;
+        return false;
+    }
 
     // check if the destination is on the board
     if (toRow < 0 || toRow > boardSize-1 || toCol < 0 || toCol > boardSize-1) {
