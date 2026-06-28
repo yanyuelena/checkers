@@ -313,15 +313,21 @@ bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int curren
         cout << "2. Reverse Capture (If captured, both pieces explode)" << endl;
         cout << "3. Boomerang Capture (Stays in spot during captures)" << endl;
         cout << "Power (1-3): ";
-        int power;
+        string power;
         cin >> power;
 
-        if (power == 2)
+        while (power != "1" && power != "2" && power != "3") 
+        {
+            cout << "Invalid choice! Please enter a valid number (1, 2, or 3): ";
+            cin >> power;
+        }
+
+        if (power == "2")
         {
             board[toRow][toCol] = 'R';
             cout << "\nUpgraded to REVERSE CAPTURE KING ('O')!" << endl;
         }
-        else if (power == 3)
+        else if (power == "3")
         {
             board[toRow][toCol] = 'B';
             cout << "\nUpgraded to BOOMERANG KING ('O')!" << endl;
@@ -341,19 +347,26 @@ bool checkEndPoint(char **board, int boardSize, int toRow, int toCol, int curren
         cout << "2. Reverse Capture (If captured, both pieces explode)" << endl;
         cout << "3. Boomerang Capture (Stays in spot during captures)" << endl;
         cout << "Power (1-3): ";
-        int power;
+        string power;
         cin >> power;
 
-        if (power == 2)
+        while (power != "1" && power != "2" && power != "3") 
+        {
+            cout << "Invalid choice! Please enter a valid number (1, 2, or 3): ";
+            cin >> power;
+        }
+
+        if (power == "2")
         {
             board[toRow][toCol] = 'P';
             cout << "\nUpgraded to REVERSE CAPTURE KING ('X')!" << endl;
         }
-        else if (power == 3)
+        else if (power == "3")
         {
             board[toRow][toCol] = 'V';
             cout << "\nUpgraded to BOOMERANG KING ('X')!" << endl;
-        } else
+        }
+        else
         {
             board[toRow][toCol] = 'X';
             cout << "\nUpgraded to DOUBLE MOVE KING ('X')! Power activates next turn." << endl;
