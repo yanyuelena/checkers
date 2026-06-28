@@ -447,15 +447,15 @@ bool validFromCoord(string fromCoord, char **board, int boardSize, string col_st
         return false;
     }
 
+    char currentPiece = board[fromRow][fromCol];
     // check if is the coordinate consist any piece
-    if (board[fromRow][fromCol] == ' ')
+    if (currentPiece == ' ')
     {
         cout << "Invalid! There is no piece there. Try again." << endl;
         return false;
     }
 
     bool ownsPiece = false;
-    char currentPiece = board[fromRow][fromCol];
 
     if (currentPlayer == 1)
     {
