@@ -101,7 +101,7 @@ int main()
     }
 
     // New game
-    if(gameChoice == "2")
+    else
     {
         bool validSize = false;
 
